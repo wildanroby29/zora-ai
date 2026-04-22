@@ -1,99 +1,187 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
-import Header from './Header';
 import { APP_MODE, APP_NAME, APP_TAGLINE } from './config';
 import botLogo from './assets/bot ai.svg';
+
+const TypingAnimation = () => (
+  <div className="typing-indicator">
+    <span></span><span></span><span></span>
+  </div>
+);
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isStarted, setIsStarted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [appLoading, setAppLoading] = useState(false);
   const chatEndRef = useRef(null);
 
+  // ✅ Auto scroll (dibikin lebih stabil, tanpa smooth biar nggak loncat)
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView();
+    }
   }, [messages, loading]);
 
-  const handleStart = () => {
-    setIsStarted(true);
+  const startApp = () => {
+    setAppLoading(true);
+
     setTimeout(() => {
-      setMessages([{ text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu?`, sender: 'bot' }]);
-    }, 500);
+      setAppLoading(false);
+      setIsStarted(true);
+
+      setTimeout(() => {
+        setMessages([
+          {
+            text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`,
+            sender: 'bot',
+          },
+        ]);
+      }, 600);
+    }, 1500);
   };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
-    const userMsg = input;
-    setMessages(prev => [...prev, { text: userMsg, sender: 'user' }]);
+
+    const currentInput = input;
+
+    setMessages(prev => [
+      ...prev,
+      { text: currentInput, sender: 'user' },
+    ]);
+
     setInput('');
     setLoading(true);
 
     try {
-      const res = await fetch("https://wildanrobians29-chat-backend.hf.space/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMsg, category: APP_MODE })
-      });
+      const res = await fetch(
+        "https://wildanrobians29-chat-backend.hf.space/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: currentInput,
+            category: APP_MODE,
+          }),
+        }
+      );
+
       const data = await res.json();
-      setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
-    } catch (e) {
-      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
+
+      setMessages(prev => [
+        ...prev,
+        { text: data.reply, sender: 'bot' },
+      ]);
+    } catch (error) {
+      setMessages(prev => [
+        ...prev,
+        {
+          text: "Maaf Wildan, koneksi saya sedang terputus.",
+          sender: 'bot',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isStarted) {
+  // ================= LOADING SCREEN =================
+  if (appLoading) {
     return (
-      <div className="gate-screen">
-        <img src={botLogo} alt="Logo" className="gate-logo" />
-        <h1 className="gate-title">{APP_NAME}</h1>
-        <p className="gate-tagline">{APP_TAGLINE}</p>
-        <button className="gate-btn" onClick={handleStart}>Mulai Percakapan</button>
+      <div className="loading-screen">
+        <div className="loader"></div>
+        <p className="loading-text">Menyiapkan {APP_NAME}...</p>
       </div>
     );
   }
 
   return (
-    <>
-      <Header />
-      <div className="layout-root">
-        <main className="chat-scroll-layer">
-          {messages.map((m, i) => (
-            <div key={i} className={`bubble-row ${m.sender} anim-up`}>
-              <div className="bubble-text">{m.text}</div>
-            </div>
-          ))}
-          {loading && (
-            <div className="bubble-row bot anim-up">
-              <div className="bubble-text typing">Mengetik...</div>
-            </div>
-          )}
-          <div ref={chatEndRef} />
-        </main>
-
-        <footer className="footer-fixed-layer">
-          <div className="input-container">
-            <input 
-              type="text"
-              value={input} 
-              onChange={(e) => setInput(e.target.value)} 
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
-              placeholder="Tulis pesan..." 
-            />
-            <button 
-              className={`send-btn ${input.trim() && !loading ? 'active' : ''}`} 
-              onClick={handleSend}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+    <div className="app-shell">
+      {!isStarted ? (
+        // ================= WELCOME =================
+        <div className="welcome-page">
+          <div className="welcome-content">
+            <img src={botLogo} alt="Logo" className="bot-welcome-img" />
+            <h1>{APP_NAME}</h1>
+            <p>{APP_TAGLINE}</p>
+            <button className="start-btn" onClick={startApp}>
+              Mulai Percakapan
             </button>
           </div>
-        </footer>
-      </div>
-    </>
+        </div>
+      ) : (
+        // ================= CHAT =================
+        <div className="main-chat-layout">
+          
+          {/* HEADER */}
+          <header className="chat-header">
+            <img src={botLogo} alt="Icon" className="bot-header-img" />
+            <div className="info">
+              <h2>
+                {APP_NAME}{' '}
+                {APP_MODE.charAt(0).toUpperCase() + APP_MODE.slice(1)}
+              </h2>
+              <div className="status">
+                <span className="dot"></span> Online
+              </div>
+            </div>
+          </header>
+
+          {/* CHAT WINDOW */}
+          <div className="chat-window">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`msg ${m.sender === 'user' ? 'user' : 'bot'}`}
+              >
+                {m.text}
+              </div>
+            ))}
+
+            {loading && (
+              <div className="msg bot">
+                <TypingAnimation />
+              </div>
+            )}
+
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* FOOTER */}
+          <footer className="footer">
+            <div className="input-box">
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSend()}
+                placeholder="Tanya sesuatu ke Zora..."
+              />
+              <button
+                className={`send-btn ${input.trim() ? 'active' : ''}`}
+                onClick={handleSend}
+                disabled={!input.trim() || loading}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                </svg>
+              </button>
+            </div>
+          </footer>
+
+        </div>
+      )}
+    </div>
   );
 }
 
