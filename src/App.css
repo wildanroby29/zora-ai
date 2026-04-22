@@ -6,122 +6,132 @@
   --text-dark: #0f172a;
 }
 
+/* Base Reset agar scroll & safe area aman */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
 body { 
   margin: 0; 
   font-family: 'Plus Jakarta Sans', sans-serif; 
   background: #fff; 
-  overflow: hidden;
+  overflow: hidden; 
+  height: 100vh;
+  width: 100vw;
 }
 
-.app-shell { width: 100vw; height: 100vh; position: relative; }
+.app-shell { width: 100%; height: 100vh; position: relative; overflow: hidden; }
 
-/* --- WELCOME PAGE --- */
+/* --- WELCOME PAGE (HIERARKI VISUAL BARU) --- */
 .welcome-page {
   position: absolute; inset: 0;
   background: var(--primary-grad);
   display: flex; flex-direction: column; 
-  align-items: center; 
-  justify-content: center; /* Menjaga semua di tengah layar */
-  color: white; text-align: center; z-index: 50;
+  align-items: center; justify-content: center;
+  color: white; text-align: center; z-index: 100;
   padding: 20px;
 }
 
 .bot-welcome-img { 
-  width: 140px; 
+  width: clamp(160px, 50vw, 240px); /* Robot diperbesar dominan */
   height: auto; 
-  margin-bottom: -10px; /* Teks rapat ke robot */
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+  margin-bottom: 0px; 
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
 }
 
-.welcome-page h1 { font-size: 2.8rem; font-weight: 800; margin: 0; letter-spacing: -0.04em; }
-.welcome-page p { opacity: 0.9; margin: 10px 0 30px 0; max-width: 400px; line-height: 1.4; }
+.welcome-page h1 { 
+  font-size: clamp(2.2rem, 8vw, 3.2rem); 
+  font-weight: 800; 
+  margin: 0; 
+  letter-spacing: -0.04em; 
+}
+
+.welcome-page p { 
+  opacity: 0.85; 
+  margin: 8px 0 45px 0; 
+  max-width: 320px; 
+  line-height: 1.4; 
+  font-size: 1.05rem;
+}
 
 .start-btn {
-  background: white; color: #1e40af; padding: 16px 45px; border-radius: 50px;
+  background: white; color: #1e40af; 
+  padding: 14px 45px; /* Proporsional, tidak jadi raksasa */
+  border-radius: 50px;
   font-weight: 700; border: none; cursor: pointer; 
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 1.05rem;
 }
-.start-btn:hover { transform: scale(1.05); }
+.start-btn:active { transform: scale(0.95); }
 
-/* --- CHAT LAYOUT --- */
-.main-chat-layout { width: 100%; height: 100%; display: flex; flex-direction: column; background: white; }
+/* --- CHAT LAYOUT (FIXED & SAFE HEADER) --- */
+.main-chat-layout { 
+  width: 100%; height: 100vh; 
+  display: flex; flex-direction: column; 
+  background: white; 
+}
 
 .chat-header {
-  padding: 12px 20px; 
-  background: var(--primary-grad); 
-  color: white;
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  z-index: 100; /* Pastikan di atas semua elemen */
-  min-height: 60px; /* Header tetap kokoh */
+  position: relative;
+  width: 100%;
+  padding: env(safe-area-inset-top, 15px) 20px 15px 20px; 
+  background: var(--primary-grad); color: white;
+  display: flex; align-items: center; gap: 12px; 
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .bot-header-img { 
-  width: 36px; 
-  height: 36px; 
-  background: transparent; 
-  flex-shrink: 0; /* Mencegah logo gepeng di mobile */
+  width: 40px; height: 40px; 
+  flex-shrink: 0; 
+  background: transparent;
 }
 
-.chat-header h2 { font-size: 1rem; margin: 0; font-weight: 700; }
+.chat-header h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
 .status { font-size: 0.75rem; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
 
 .chat-window { 
-  flex: 1; 
-  overflow-y: auto; 
-  padding: 20px; 
-  background: var(--chat-bg); 
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
+  flex: 1; overflow-y: auto; 
+  padding: 20px; background: var(--chat-bg); 
+  display: flex; flex-direction: column; gap: 15px; 
 }
 
-/* Bubbles */
 .msg { 
-  max-width: 80%; 
-  padding: 12px 16px; 
-  border-radius: 18px; 
-  font-size: 0.925rem; 
-  line-height: 1.5; 
-  white-space: pre-wrap; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  max-width: 85%; padding: 12px 16px; border-radius: 18px; 
+  font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; 
 }
-
 .bot { background: white; align-self: flex-start; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
-.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
 
-.footer { padding: 15px 20px; background: white; border-top: 1px solid #e2e8f0; }
-.input-box { display: flex; background: #f1f5f9; border-radius: 12px; padding: 6px; }
-input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; }
-.send-btn { width: 40px; height: 40px; border-radius: 10px; border: none; background: #cbd5e1; color: white; cursor: pointer; }
-.send-btn.active { background: var(--primary-grad); }
+.footer { 
+  padding: 12px 20px env(safe-area-inset-bottom, 15px) 20px; 
+  background: white; border-top: 1px solid #e2e8f0; 
+}
+.input-box { display: flex; background: #f1f5f9; border-radius: 15px; padding: 6px; border: 1px solid transparent; }
+.input-box:focus-within { border-color: #3b82f6; background: white; }
+input { flex: 1; border: none; background: transparent; padding: 12px; outline: none; font-size: 16px; }
+.send-btn { 
+  width: 44px; height: 44px; border-radius: 12px; 
+  border: none; background: #cbd5e1; color: white; 
+  cursor: pointer; transition: 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.send-btn.active { background: var(--primary-grad); transform: scale(1.05); }
 
 /* --- ANIMATIONS --- */
-.loading-screen { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
-.loader { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.fade-in { animation: fadeIn 0.5s ease-out; }
-.zoom-in { animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.slide-up { animation: slideUp 0.5s ease-out forwards; opacity: 0; }
+.zoom-in { animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
 .slide-right { animation: slideRight 0.5s ease-out forwards; opacity: 0; }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
 .pulse { animation: pulse-green 2s infinite; }
 @keyframes pulse-green {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 .typing-indicator span { display: inline-block; width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
@@ -129,47 +139,11 @@ input { flex: 1; border: none; background: transparent; padding: 10px; outline: 
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
-/* --- MOBILE VERSION (FIXED) --- */
+/* Mobile Optimization */
 @media (max-width: 600px) {
-  /* Welcome Page di Tengah */
-  .welcome-page {
-    justify-content: center;
-    padding: 30px;
-  }
-
-  .bot-welcome-img { 
-    width: 130px; 
-    margin-bottom: 5px; 
-  }
-
-  .welcome-page h1 { font-size: 2.3rem; }
-  .welcome-page p { font-size: 1rem; margin-bottom: 40px; }
-
-  .start-btn {
-    width: 90%;
-    padding: 18px;
-    font-size: 1.1rem;
-  }
-
-  /* Header Mobile */
-  .chat-header {
-    padding: 10px 15px;
-    height: 70px; /* Supaya tetap terlihat */
-  }
-
-  .bot-header-img {
-    width: 40px; /* Ikon diperbesar di mobile */
-    height: 40px;
-  }
-
-  .chat-header h2 { font-size: 1.1rem; }
-
-  /* Message Bubbles Mobile */
-  .msg { 
-    max-width: 90%; 
-    font-size: 0.95rem; 
-  }
-
-  /* Input Mobile */
-  input { font-size: 16px; } /* Mencegah auto-zoom di iPhone */
+  .welcome-page { padding: 40px 25px; }
+  .bot-welcome-img { width: 200px; } /* Di HP robot tetap besar */
+  .start-btn { min-width: 200px; width: auto; } /* Tombol proporsional */
+  .chat-header { min-height: 85px; } /* Memberi ruang notch */
+  .msg { max-width: 90%; }
 }

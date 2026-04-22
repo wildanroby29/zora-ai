@@ -26,13 +26,12 @@ function App() {
     setTimeout(() => {
       setAppLoading(false);
       setIsStarted(true);
-      // Pesan sapaan otomatis muncul seperti chat bot
       setTimeout(() => {
         setMessages([{ 
           text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
           sender: 'bot' 
         }]);
-      }, 500);
+      }, 600);
     }, 1200);
   };
 
@@ -62,7 +61,7 @@ function App() {
     return (
       <div className="loading-screen">
         <div className="loader"></div>
-        <p className="animate-pulse">Menyiapkan {APP_NAME}...</p>
+        <p className="loading-text">Menyiapkan {APP_NAME}...</p>
       </div>
     );
   }
