@@ -4,8 +4,10 @@ import { APP_MODE, APP_NAME, APP_TAGLINE } from './config';
 import botLogo from './assets/bot ai.svg';
 
 const TypingAnimation = () => (
-  <div className="typing-indicator">
-    <span></span><span></span><span></span>
+  <div className="typing-box">
+    <div className="typing-dot"></div>
+    <div className="typing-dot"></div>
+    <div className="typing-dot"></div>
   </div>
 );
 
@@ -28,7 +30,7 @@ function App() {
       setIsStarted(true);
       setTimeout(() => {
         setMessages([{ text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, sender: 'bot' }]);
-      }, 500);
+      }, 600);
     }, 1200);
   };
 
@@ -48,7 +50,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Gagal memuat pesan.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -56,58 +58,63 @@ function App() {
 
   if (appLoading) {
     return (
-      <div className="loading-screen">
-        <div className="loader"></div>
-        <p>Memuat {APP_NAME}...</p>
+      <div className="gate-loader">
+        <div className="spin"></div>
+        <p>Initializing {APP_NAME}...</p>
       </div>
     );
   }
 
   return (
-    <div className="app-container">
+    <div className="app-frame">
       {!isStarted ? (
-        <div className="welcome-screen zoom-in">
-          <img src={botLogo} alt="Logo" className="w-logo" />
-          <div className="w-text">
-            <h1>{APP_NAME}</h1>
-            <p>{APP_TAGLINE}</p>
-          </div>
-          <button className="w-btn" onClick={startApp}>Mulai Percakapan</button>
+        <div className="hero-screen zoom-in">
+          <img src={botLogo} alt="Logo" className="hero-logo" />
+          <h1 className="slide-up">{APP_NAME}</h1>
+          <p className="slide-up d-1">{APP_TAGLINE}</p>
+          <button className="hero-btn slide-up d-2" onClick={startApp}>Mulai</button>
         </div>
       ) : (
-        <div className="chat-layout fade-in">
-          <header className="fixed-header">
-            <div className="header-content">
-              <img src={botLogo} alt="Icon" className="h-logo" />
-              <div className="h-info">
+        <div className="app-container">
+          <header className="app-header">
+            <div className="header-inner">
+              <img src={botLogo} alt="Logo" className="header-icon" />
+              <div className="header-meta">
                 <h3>{APP_NAME} {APP_MODE.toUpperCase()}</h3>
-                <div className="h-status">
-                  <span className="glow-dot"></span> Online
+                <div className="online-badge">
+                  <span className="glow-point"></span> Online
                 </div>
               </div>
             </div>
           </header>
 
-          <main className="chat-area">
+          <main className="chat-scrollarea">
             {messages.map((m, i) => (
-              <div key={i} className={`bubble ${m.sender} message-anim`}>
+              <div key={i} className={`chat-bubble ${m.sender} anim-pop`}>
                 {m.text}
               </div>
             ))}
-            {loading && <div className="bubble bot message-anim"><TypingAnimation /></div>}
+            {loading && (
+              <div className="chat-bubble bot anim-pop">
+                <TypingAnimation />
+              </div>
+            )}
             <div ref={chatEndRef} />
           </main>
 
-          <footer className="fixed-footer">
-            <div className="input-group">
+          <footer className="app-footer">
+            <div className="chat-input-wrapper">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Ketik pesan..." 
+                placeholder="Tanya apapun..." 
               />
-              <button className={`s-btn ${input.trim() ? 'active' : ''}`} onClick={handleSend}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <button 
+                className={`send-action ${input.trim() ? 'can-send' : ''}`} 
+                onClick={handleSend}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
                 </svg>
               </button>

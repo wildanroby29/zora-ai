@@ -2,113 +2,153 @@
 
 :root {
   --primary: #1e40af;
+  --accent: #3b82f6;
   --grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  --h-height: 65px; /* Tinggi Header Diperkecil */
-  --f-height: 75px; /* Tinggi Footer */
+  --header-h: 60px;
+  --footer-h: 80px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body, html { 
-  font-family: 'Plus Jakarta Sans', sans-serif; 
-  background: #ffffff; overflow: hidden; height: 100vh; width: 100vw;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #fff;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Mencegah scroll pada body utama */
+  position: fixed; /* Mencegah bounce scroll di iOS */
 }
 
-/* CONTAINER UTAMA */
-.app-container { width: 100%; height: 100vh; position: relative; }
+/* FRAME UTAMA */
+.app-frame {
+  width: 100%;
+  height: 100dvh; /* Mengikuti tinggi layar mobile secara dinamis */
+  display: flex;
+  flex-direction: column;
+}
 
-/* LOADING SCREEN */
-.loading-screen { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; }
-.loader { width: 35px; height: 35px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* WELCOME SCREEN - Hirarki yang benar */
-.welcome-screen {
+/* HERO / WELCOME */
+.hero-screen {
   position: absolute; inset: 0; background: var(--grad);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: white; padding: 30px; text-align: center;
+  color: white; z-index: 1000; text-align: center;
 }
-.w-logo { width: 120px; height: auto; margin-bottom: 20px; }
-.w-text h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; }
-.w-text p { font-size: 0.95rem; opacity: 0.8; margin-bottom: 30px; }
-.w-btn { 
-  background: white; color: var(--primary); 
-  padding: 12px 35px; /* Ukuran tombol lebih proporsional */
-  border-radius: 50px; border: none; font-weight: 700; cursor: pointer; 
-  font-size: 1rem; box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-}
+.hero-logo { width: 100px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
+.hero-screen h1 { font-size: 2.2rem; font-weight: 800; }
+.hero-screen p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 30px; }
+.hero-btn { background: white; color: var(--primary); padding: 12px 40px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; font-size: 1rem; }
 
-/* CHAT LAYOUT GRID - Menjamin kestabilan elemen */
-.chat-layout { 
-  display: grid;
-  grid-template-rows: var(--h-height) 1fr var(--f-height);
-  height: 100vh;
+/* LAYOUT CONTAINER */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
-/* HEADER - Ringkas & Kaku */
-.fixed-header {
-  background: var(--grad); color: white;
-  padding: env(safe-area-inset-top, 0) 20px 0 20px;
-  display: flex; align-items: center; z-index: 1000;
+/* HEADER - FIXED POS */
+.app-header {
+  flex-shrink: 0;
+  height: var(--header-h);
+  background: var(--grad);
+  color: white;
+  padding: env(safe-area-inset-top, 0) 20px 0;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.header-content { display: flex; align-items: center; gap: 10px; }
-.h-logo { width: 32px; height: 32px; }
-.h-info h3 { font-size: 0.95rem; font-weight: 700; margin: 0; }
-.h-status { font-size: 0.7rem; display: flex; align-items: center; gap: 5px; opacity: 0.9; }
+.header-inner { display: flex; align-items: center; gap: 12px; }
+.header-icon { width: 32px; height: 32px; }
+.header-meta h3 { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.online-badge { font-size: 0.7rem; display: flex; align-items: center; gap: 5px; opacity: 0.9; }
 
-/* SINAR ONLINE BERSINAR */
-.glow-dot { 
-  width: 7px; height: 7px; background: #22c55e; border-radius: 50%; 
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
-  animation: glowing 2s infinite;
+/* GLOWING DOT */
+.glow-point { 
+  width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+  animation: pulse-glow 2s infinite;
 }
-@keyframes glowing {
-  0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); transform: scale(1); }
-  50% { box-shadow: 0 0 15px rgba(34, 197, 94, 1); transform: scale(1.1); }
+@keyframes pulse-glow {
+  0% { transform: scale(0.9); box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
+  50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(34, 197, 94, 1); }
+  100% { transform: scale(0.9); box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
 }
 
-/* CHAT WINDOW - Hanya area ini yang bisa scroll */
-.chat-area { 
-  overflow-y: auto; 
-  background: #fff; padding: 20px;
-  display: flex; flex-direction: column; gap: 15px;
+/* CHAT SCROLL AREA - Satu-satunya bagian yang boleh gerak */
+.chat-scrollarea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain; /* Menahan scroll agar tidak narik header */
 }
-.bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.92rem; line-height: 1.5; }
-.bot { background: #f1f5f9; align-self: flex-start; border-bottom-left-radius: 4px; }
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.bot { background: #f1f5f9; align-self: flex-start; color: #1e293b; border-bottom-left-radius: 4px; }
 .user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-/* FOOTER - Kaku di bawah */
-.fixed-footer {
-  background: white; border-top: 1px solid #eee;
-  padding: 10px 20px calc(env(safe-area-inset-bottom, 0) + 10px) 20px;
-  display: flex; align-items: center; z-index: 1000;
+/* FOOTER - FIXED POS */
+.app-footer {
+  flex-shrink: 0;
+  background: white;
+  border-top: 1px solid #f1f5f9;
+  padding: 10px 15px calc(env(safe-area-inset-bottom, 0) + 12px);
+  z-index: 100;
 }
-.input-group { 
-  display: flex; width: 100%; background: #f1f5f9; 
-  border-radius: 12px; padding: 4px 6px; align-items: center; 
+.chat-input-wrapper {
+  display: flex; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 6px; align-items: center;
 }
-input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 16px; }
-.s-btn { 
-  width: 38px; height: 38px; border-radius: 10px; border: none; 
-  background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center;
+.chat-input-wrapper input {
+  flex: 1; border: none; background: transparent; padding: 10px 14px; outline: none; font-size: 16px; color: #1e293b;
 }
-.s-btn.active { background: var(--grad); }
+.send-action {
+  width: 42px; height: 42px; border-radius: 12px; border: none; background: #e2e8f0; color: white;
+  display: flex; align-items: center; justify-content: center; transition: 0.3s;
+}
+.send-action.can-send { background: var(--grad); transform: scale(1.05); }
+.send-action svg { width: 20px; height: 20px; }
 
-/* ANIMASI MUNCUL */
-.message-anim { animation: msgUp 0.3s ease-out forwards; }
-@keyframes msgUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* ANIMASI HALUS */
+.anim-pop { animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .fade-in { animation: opac 0.4s ease; }
 @keyframes opac { from { opacity: 0; } to { opacity: 1; } }
-.zoom-in { animation: zIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-@keyframes zIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.typing-indicator span { display: inline-block; width: 5px; height: 5px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.zoom-in { animation: zoom 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes zoom { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-/* Fix Khusus Mobile */
+.slide-up { animation: s-up 0.5s ease-out forwards; opacity: 0; }
+@keyframes s-up { from { transform: translateY(20px); } to { transform: translateY(0); opacity: 1; } }
+
+.d-1 { animation-delay: 0.1s; }
+.d-2 { animation-delay: 0.2s; }
+
+/* TYPING INDICATOR ROBOT */
+.typing-box { display: flex; gap: 4px; padding: 4px 0; }
+.typing-dot { width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: dot-bounce 1.4s infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* Fix Mobile Notch Header */
 @media (max-width: 600px) {
-  :root { --h-height: 85px; }
-  .fixed-header { padding-top: calc(env(safe-area-inset-top, 0) + 25px); }
+  :root { --header-h: 90px; }
+  .app-header { padding-top: calc(env(safe-area-inset-top, 0) + 30px); }
 }
