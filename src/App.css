@@ -9,7 +9,8 @@
 /* Base Reset */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body {
+/* ✅ FIX UTAMA */
+html, body, #root {
   height: 100%;
 }
 
@@ -17,13 +18,15 @@ body {
   margin: 0; 
   font-family: 'Plus Jakarta Sans', sans-serif; 
   background: #fff; 
+  /* ❌ overflow: hidden DIHAPUS */
 }
 
 /* ================= APP SHELL ================= */
 .app-shell { 
   width: 100%; 
-  height: 100dvh; 
+  height: 100%;
   position: relative; 
+  overflow: hidden; /* aman di sini */
 }
 
 /* ================= LOADING ================= */
@@ -52,6 +55,7 @@ body {
 
 .bot-welcome-img { 
   width: clamp(150px, 45vw, 210px);
+  height: auto; 
   margin-bottom: 5px;
 }
 
@@ -73,29 +77,31 @@ body {
   font-weight: 700; border: none; cursor: pointer;
 }
 
-/* ================= CHAT LAYOUT (FIX) ================= */
+/* ================= CHAT LAYOUT (FIX TANPA UBah DESIGN) ================= */
 .main-chat-layout { 
-  height: 100dvh;
+  width: 100%; 
+  height: 100%;
   display: flex; 
   flex-direction: column; 
   background: white; 
-  overflow: hidden;
 }
 
-/* HEADER FIX */
+/* HEADER (tetap seperti semula) */
 .chat-header {
-  flex-shrink: 0;
+  position: relative;
+  width: 100%;
   padding: env(safe-area-inset-top, 15px) 20px 15px 20px; 
   background: var(--primary-grad); 
   color: white;
   display: flex; 
   align-items: center; 
-  gap: 12px;
+  gap: 12px; 
+  z-index: 1000;
 }
 
 .bot-header-img { width: 38px; height: 38px; }
 
-/* CHAT SCROLL */
+/* ✅ CHAT SCROLL FIX */
 .chat-window { 
   flex: 1; 
   overflow-y: auto; 
@@ -106,9 +112,8 @@ body {
   gap: 15px; 
 }
 
-/* FOOTER FIX */
+/* FOOTER (tetap seperti semula) */
 .footer { 
-  flex-shrink: 0;
   padding: 12px 20px env(safe-area-inset-bottom, 15px) 20px; 
   background: white; 
   border-top: 1px solid #e2e8f0; 
@@ -127,7 +132,7 @@ input {
   background: transparent; 
   padding: 12px; 
   outline: none; 
-  font-size: 16px; /* penting untuk mobile */
+  font-size: 16px;
 }
 
 .send-btn { 
@@ -163,7 +168,18 @@ input {
   align-self: flex-end; 
 }
 
-/* ================= ANIMATION ================= */
+/* ================= ANIMASI (TETAP) ================= */
+.zoom-in { animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.fade-in { animation: fadeIn 0.5s ease-out; }
+.slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
+.slide-right { animation: slideRight 0.5s ease-out forwards; opacity: 0; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* typing indicator tetap */
 .typing-indicator span { 
   display: inline-block; 
   width: 6px; height: 6px; 
@@ -172,7 +188,6 @@ input {
   margin: 0 2px; 
   animation: bounce 1.3s infinite; 
 }
-
 @keyframes bounce { 
   0%, 60%, 100% { transform: translateY(0); } 
   30% { transform: translateY(-6px); } 
