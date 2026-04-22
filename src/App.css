@@ -19,19 +19,22 @@ body {
 .welcome-page {
   position: absolute; inset: 0;
   background: var(--primary-grad);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; 
+  align-items: center; 
+  justify-content: center; /* Menjaga semua di tengah layar */
   color: white; text-align: center; z-index: 50;
+  padding: 20px;
 }
 
 .bot-welcome-img { 
   width: 140px; 
   height: auto; 
-  margin-bottom: -15px; 
+  margin-bottom: -10px; /* Teks rapat ke robot */
   filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
 }
 
 .welcome-page h1 { font-size: 2.8rem; font-weight: 800; margin: 0; letter-spacing: -0.04em; }
-.welcome-page p { opacity: 0.9; margin: 5px 0 30px 0; max-width: 400px; line-height: 1.4; }
+.welcome-page p { opacity: 0.9; margin: 10px 0 30px 0; max-width: 400px; line-height: 1.4; }
 
 .start-btn {
   background: white; color: #1e40af; padding: 16px 45px; border-radius: 50px;
@@ -51,15 +54,15 @@ body {
   display: flex; 
   align-items: center; 
   gap: 12px; 
-  z-index: 10;
+  z-index: 100; /* Pastikan di atas semua elemen */
+  min-height: 60px; /* Header tetap kokoh */
 }
 
-/* Background logo dihapus agar transparan/bersih */
 .bot-header-img { 
   width: 36px; 
   height: 36px; 
   background: transparent; 
-  padding: 0; 
+  flex-shrink: 0; /* Mencegah logo gepeng di mobile */
 }
 
 .chat-header h2 { font-size: 1rem; margin: 0; font-weight: 700; }
@@ -87,19 +90,8 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
-.bot { 
-  background: white; 
-  align-self: flex-start; 
-  border: 1px solid #e2e8f0; 
-  border-bottom-left-radius: 4px; 
-}
-
-.user { 
-  background: #1e40af; 
-  color: white; 
-  align-self: flex-end; 
-  border-bottom-right-radius: 4px; 
-}
+.bot { background: white; align-self: flex-start; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
+.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
 .footer { padding: 15px 20px; background: white; border-top: 1px solid #e2e8f0; }
 .input-box { display: flex; background: #f1f5f9; border-radius: 12px; padding: 6px; }
@@ -108,7 +100,7 @@ input { flex: 1; border: none; background: transparent; padding: 10px; outline: 
 .send-btn.active { background: var(--primary-grad); }
 
 /* --- ANIMATIONS --- */
-.loading-screen { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+.loading-screen { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
 .loader { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -137,9 +129,47 @@ input { flex: 1; border: none; background: transparent; padding: 10px; outline: 
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
+/* --- MOBILE VERSION (FIXED) --- */
 @media (max-width: 600px) {
-  .welcome-page h1 { font-size: 2.2rem; }
-  .bot-welcome-img { width: 120px; }
-  .msg { max-width: 90%; }
-  input { font-size: 16px; }
+  /* Welcome Page di Tengah */
+  .welcome-page {
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .bot-welcome-img { 
+    width: 130px; 
+    margin-bottom: 5px; 
+  }
+
+  .welcome-page h1 { font-size: 2.3rem; }
+  .welcome-page p { font-size: 1rem; margin-bottom: 40px; }
+
+  .start-btn {
+    width: 90%;
+    padding: 18px;
+    font-size: 1.1rem;
+  }
+
+  /* Header Mobile */
+  .chat-header {
+    padding: 10px 15px;
+    height: 70px; /* Supaya tetap terlihat */
+  }
+
+  .bot-header-img {
+    width: 40px; /* Ikon diperbesar di mobile */
+    height: 40px;
+  }
+
+  .chat-header h2 { font-size: 1.1rem; }
+
+  /* Message Bubbles Mobile */
+  .msg { 
+    max-width: 90%; 
+    font-size: 0.95rem; 
+  }
+
+  /* Input Mobile */
+  input { font-size: 16px; } /* Mencegah auto-zoom di iPhone */
 }
