@@ -6,7 +6,7 @@
   --text-dark: #0f172a;
 }
 
-/* Base Reset agar scroll & safe area aman */
+/* Base Reset */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body { 
@@ -20,7 +20,21 @@ body {
 
 .app-shell { width: 100%; height: 100vh; position: relative; overflow: hidden; }
 
-/* --- WELCOME PAGE (HIERARKI VISUAL BARU) --- */
+/* --- LOADING SCREEN --- */
+.loading-screen {
+  position: fixed; inset: 0; background: white;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.loader {
+  width: 45px; height: 45px; border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6; border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.loading-text { margin-top: 15px; font-weight: 600; color: #64748b; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- WELCOME PAGE (BALANCED HIERARCHY) --- */
 .welcome-page {
   position: absolute; inset: 0;
   background: var(--primary-grad);
@@ -31,14 +45,14 @@ body {
 }
 
 .bot-welcome-img { 
-  width: clamp(160px, 50vw, 240px); /* Robot diperbesar dominan */
+  width: clamp(150px, 45vw, 210px); /* Ukuran robot yang pas & proporsional */
   height: auto; 
-  margin-bottom: 0px; 
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+  margin-bottom: 5px;
+  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.25));
 }
 
 .welcome-page h1 { 
-  font-size: clamp(2.2rem, 8vw, 3.2rem); 
+  font-size: clamp(2.2rem, 8vw, 3rem); 
   font-weight: 800; 
   margin: 0; 
   letter-spacing: -0.04em; 
@@ -46,24 +60,24 @@ body {
 
 .welcome-page p { 
   opacity: 0.85; 
-  margin: 8px 0 45px 0; 
+  margin: 10px 0 35px 0; 
   max-width: 320px; 
   line-height: 1.4; 
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .start-btn {
   background: white; color: #1e40af; 
-  padding: 14px 45px; /* Proporsional, tidak jadi raksasa */
+  padding: 14px 40px; 
   border-radius: 50px;
   font-weight: 700; border: none; cursor: pointer; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 .start-btn:active { transform: scale(0.95); }
 
-/* --- CHAT LAYOUT (FIXED & SAFE HEADER) --- */
+/* --- CHAT LAYOUT (FIXED HEADER) --- */
 .main-chat-layout { 
   width: 100%; height: 100vh; 
   display: flex; flex-direction: column; 
@@ -80,12 +94,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.bot-header-img { 
-  width: 40px; height: 40px; 
-  flex-shrink: 0; 
-  background: transparent;
-}
-
+.bot-header-img { width: 38px; height: 38px; flex-shrink: 0; }
 .chat-header h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
 .status { font-size: 0.75rem; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
@@ -101,14 +110,13 @@ body {
   font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; 
 }
 .bot { background: white; align-self: flex-start; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
-.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
+.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
 .footer { 
   padding: 12px 20px env(safe-area-inset-bottom, 15px) 20px; 
   background: white; border-top: 1px solid #e2e8f0; 
 }
-.input-box { display: flex; background: #f1f5f9; border-radius: 15px; padding: 6px; border: 1px solid transparent; }
-.input-box:focus-within { border-color: #3b82f6; background: white; }
+.input-box { display: flex; background: #f1f5f9; border-radius: 15px; padding: 6px; }
 input { flex: 1; border: none; background: transparent; padding: 12px; outline: none; font-size: 16px; }
 .send-btn { 
   width: 44px; height: 44px; border-radius: 12px; 
@@ -116,22 +124,26 @@ input { flex: 1; border: none; background: transparent; padding: 12px; outline: 
   cursor: pointer; transition: 0.3s;
   display: flex; align-items: center; justify-content: center;
 }
-.send-btn.active { background: var(--primary-grad); transform: scale(1.05); }
+.send-btn.active { background: var(--primary-grad); }
 
 /* --- ANIMATIONS --- */
 .zoom-in { animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.fade-in { animation: fadeIn 0.5s ease-out; }
 .slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
 .slide-right { animation: slideRight 0.5s ease-out forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
 
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
 .pulse { animation: pulse-green 2s infinite; }
 @keyframes pulse-green {
-  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 .typing-indicator span { display: inline-block; width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
@@ -142,8 +154,8 @@ input { flex: 1; border: none; background: transparent; padding: 12px; outline: 
 /* Mobile Optimization */
 @media (max-width: 600px) {
   .welcome-page { padding: 40px 25px; }
-  .bot-welcome-img { width: 200px; } /* Di HP robot tetap besar */
-  .start-btn { min-width: 200px; width: auto; } /* Tombol proporsional */
-  .chat-header { min-height: 85px; } /* Memberi ruang notch */
+  .bot-welcome-img { width: 170px; } /* Ukuran robot pas untuk layar HP */
+  .start-btn { min-width: 180px; width: auto; padding: 14px 30px; }
+  .chat-header { min-height: 80px; }
   .msg { max-width: 90%; }
 }

@@ -17,22 +17,25 @@ function App() {
   const [appLoading, setAppLoading] = useState(false);
   const chatEndRef = useRef(null);
 
+  // Auto scroll ke bawah saat pesan baru masuk
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
   const startApp = () => {
     setAppLoading(true);
+    // Simulasi loading screen sebelum masuk ke chat
     setTimeout(() => {
       setAppLoading(false);
       setIsStarted(true);
+      // Munculkan sapaan otomatis
       setTimeout(() => {
         setMessages([{ 
           text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
           sender: 'bot' 
         }]);
       }, 600);
-    }, 1200);
+    }, 1500);
   };
 
   const handleSend = async () => {
@@ -51,7 +54,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Maaf Wildan, koneksi saya sedang terputus.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -109,7 +112,7 @@ function App() {
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Ketik sesuatu..." 
+                placeholder="Tanya sesuatu ke Zora..." 
               />
               <button 
                 className={`send-btn ${input.trim() ? 'active' : ''}`} 
