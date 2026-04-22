@@ -31,8 +31,8 @@ function App() {
           text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
           sender: 'bot' 
         }]);
-      }, 600);
-    }, 1500);
+      }, 800);
+    }, 1200);
   };
 
   const handleSend = async () => {
@@ -71,9 +71,9 @@ function App() {
       {!isStarted ? (
         <div className="welcome-page">
           <div className="welcome-content zoom-in">
-            <img src={botLogo} alt="Logo" className="bot-welcome-img" />
-            <h1 className="slide-up">{APP_NAME}</h1>
-            <p className="slide-up delay-1">{APP_TAGLINE}</p>
+            <img src={botLogo} alt="Robot Logo" className="bot-welcome-img" />
+            <h1 className="welcome-title slide-up">{APP_NAME}</h1>
+            <p className="welcome-desc slide-up delay-1">{APP_TAGLINE}</p>
             <button className="start-btn slide-up delay-2" onClick={startApp}>
               Mulai Percakapan
             </button>
@@ -86,32 +86,32 @@ function App() {
             <div className="info">
               <h2 className="slide-right">{APP_NAME} {APP_MODE.toUpperCase()}</h2>
               <div className="status slide-right delay-1">
-                <span className="dot pulse"></span> Online
+                <span className="dot pulse-glow"></span> Online
               </div>
             </div>
           </header>
 
           <div className="chat-window">
             {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.sender === 'user' ? 'user' : 'bot'} slide-up`}>
+              <div key={i} className={`msg ${m.sender === 'user' ? 'user user-msg' : 'bot bot-msg'}`}>
                 {m.text}
               </div>
             ))}
             {loading && (
-              <div className="msg bot slide-up">
+              <div className="msg bot bot-msg">
                 <TypingAnimation />
               </div>
             )}
             <div ref={chatEndRef} />
           </div>
 
-          <footer className="footer slide-up">
+          <footer className="footer">
             <div className="input-box">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Ketik pesan..." 
+                placeholder="Tanya sesuatu..." 
               />
               <button 
                 className={`send-btn ${input.trim() ? 'active' : ''}`} 
