@@ -4,10 +4,8 @@ import { APP_MODE, APP_NAME, APP_TAGLINE } from './config';
 import botLogo from './assets/bot ai.svg';
 
 const TypingAnimation = () => (
-  <div className="bot-typing">
-    <div className="bounce1"></div>
-    <div className="bounce2"></div>
-    <div className="bounce3"></div>
+  <div className="typing-dots">
+    <span></span><span></span><span></span>
   </div>
 );
 
@@ -29,8 +27,8 @@ function App() {
       setAppLoading(false);
       setIsStarted(true);
       setTimeout(() => {
-        setMessages([{ text: `Halo Wildan, ada yang bisa saya bantu hari ini?`, sender: 'bot' }]);
-      }, 600);
+        setMessages([{ text: `Halo Wildan, ada yang bisa saya bantu?`, sender: 'bot' }]);
+      }, 500);
     }, 1500);
   };
 
@@ -50,7 +48,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Gagal terhubung ke server.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -58,60 +56,61 @@ function App() {
 
   if (appLoading) {
     return (
-      <div className="entry-loader">
-        <div className="circle-loader"></div>
-        <p>Menyiapkan Aksara AI...</p>
+      <div className="init-loader">
+        <div className="loader-ring"></div>
+        <p>Memuat {APP_NAME}...</p>
       </div>
     );
   }
 
   return (
-    <div className="app-viewport">
+    <div className="main-viewport">
       {!isStarted ? (
-        <div className="welcome-screen anim-zoom">
-          <img src={botLogo} alt="Logo" className="welcome-logo" />
-          <h1 className="anim-slide-up">{APP_NAME}</h1>
-          <p className="anim-slide-up delay-1">{APP_TAGLINE}</p>
-          <button className="start-btn anim-slide-up delay-2" onClick={startApp}>Mulai</button>
+        <div className="landing-screen anim-fade">
+          <img src={botLogo} alt="Logo" className="landing-logo" />
+          <h1 className="anim-up">{APP_NAME}</h1>
+          <p className="anim-up delay-1">{APP_TAGLINE}</p>
+          <button className="start-btn anim-up delay-2" onClick={startApp}>Mulai</button>
         </div>
       ) : (
-        <div className="chat-layout">
-          <header className="header-bar">
-            <div className="header-inner">
-              <img src={botLogo} alt="Logo" className="header-icon" />
-              <div className="header-meta">
+        <div className="chat-layer">
+          <header className="fixed-top">
+            <div className="header-box">
+              <img src={botLogo} alt="Bot" className="bot-icon" />
+              <div className="bot-status-wrapper">
                 <h3>{APP_NAME}</h3>
-                <div className="online-status">
-                  <span className="glow-indicator"></span> Online
+                <div className="status-badge">
+                  <span className="lamp-glow"></span>
+                  Online
                 </div>
               </div>
             </div>
           </header>
 
-          <main className="chat-area">
+          <main className="fixed-body">
             {messages.map((m, i) => (
-              <div key={i} className={`message-row ${m.sender} anim-pop`}>
-                <div className="message-text">{m.text}</div>
+              <div key={i} className={`chat-row ${m.sender} anim-pop`}>
+                <div className="bubble-text">{m.text}</div>
               </div>
             ))}
             {loading && (
-              <div className="message-row bot anim-pop">
-                <div className="message-text"><TypingAnimation /></div>
+              <div className="chat-row bot anim-pop">
+                <div className="bubble-text"><TypingAnimation /></div>
               </div>
             )}
             <div ref={chatEndRef} />
           </main>
 
-          <footer className="footer-bar">
-            <div className="input-container">
+          <footer className="fixed-bottom">
+            <div className="input-group-custom">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Tulis pesan..." 
+                placeholder="Ketik pesan..." 
               />
               <button 
-                className={`send-button ${input.trim() ? 'ready' : ''}`} 
+                className={`btn-send-custom ${input.trim() ? 'active' : ''}`} 
                 onClick={handleSend}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
