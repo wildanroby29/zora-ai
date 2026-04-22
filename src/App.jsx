@@ -38,7 +38,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (e) {
-      setMessages(prev => [...prev, { text: "Error: Gagal koneksi.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -47,10 +47,10 @@ function App() {
   if (!isStarted) {
     return (
       <div className="gate-screen">
-        <img src={botLogo} alt="Logo" />
-        <h1>{APP_NAME}</h1>
-        <p>{APP_TAGLINE}</p>
-        <button onClick={handleStart}>Mulai</button>
+        <img src={botLogo} alt="Logo" className="gate-logo" />
+        <h1 className="gate-title">{APP_NAME}</h1>
+        <p className="gate-tagline">{APP_TAGLINE}</p>
+        <button className="gate-btn" onClick={handleStart}>Mulai Percakapan</button>
       </div>
     );
   }
@@ -58,32 +58,32 @@ function App() {
   return (
     <>
       <Header />
-      
-      <div className="layout-wrapper">
-        <main className="chat-area">
+      <div className="layout-root">
+        <main className="chat-scroll-layer">
           {messages.map((m, i) => (
-            <div key={i} className={`msg-row ${m.sender}`}>
-              <div className="msg-bubble">{m.text}</div>
+            <div key={i} className={`bubble-row ${m.sender} anim-up`}>
+              <div className="bubble-text">{m.text}</div>
             </div>
           ))}
           {loading && (
-            <div className="msg-row bot">
-              <div className="msg-bubble">Mengetik...</div>
+            <div className="bubble-row bot anim-up">
+              <div className="bubble-text typing">Mengetik...</div>
             </div>
           )}
           <div ref={chatEndRef} />
         </main>
 
-        <footer className="footer-area">
-          <div className="input-pill">
+        <footer className="footer-fixed-layer">
+          <div className="input-container">
             <input 
+              type="text"
               value={input} 
               onChange={(e) => setInput(e.target.value)} 
               onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
               placeholder="Tulis pesan..." 
             />
             <button 
-              className={input.trim() ? 'send-btn active' : 'send-btn'} 
+              className={`send-btn ${input.trim() && !loading ? 'active' : ''}`} 
               onClick={handleSend}
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

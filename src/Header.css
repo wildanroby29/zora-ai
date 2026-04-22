@@ -1,24 +1,15 @@
 .main-header-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: #1e40af;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 70px; background: #1e40af; z-index: 10000;
+  display: flex; align-items: center; padding: 0 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-
 .h-container { display: flex; align-items: center; gap: 12px; color: white; }
 .h-container img { width: 32px; height: 32px; }
-.h-text h3 { font-size: 1.1rem; font-weight: 800; margin: 0; }
+.h-text h3 { margin: 0; font-weight: 800; font-size: 1.1rem; }
 .status-indicator { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
 
-/* Penyesuaian untuk HP dengan Notch */
 @media (max-width: 600px) {
   .main-header-fixed { height: 90px; padding-top: 25px; }
 }
