@@ -8,6 +8,7 @@ html, body {
   margin: 0;
   height: 100%;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow: hidden; /* ✅ WAJIB */
 }
 
 /* ROOT */
@@ -15,6 +16,7 @@ html, body {
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* ✅ penting */
 }
 
 /* ===== WELCOME ===== */
@@ -65,8 +67,7 @@ html, body {
 
 /* HEADER */
 .chat-header {
-  position: sticky;
-  top: 0;
+  flex-shrink: 0; /* ✅ */
   background: #1e40af;
   color: white;
   padding: 12px;
@@ -119,8 +120,7 @@ html, body {
 
 /* FOOTER */
 .footer {
-  position: sticky;
-  bottom: 0;
+  flex-shrink: 0; /* ✅ */
   background: white;
   padding: 10px;
 }
