@@ -74,7 +74,9 @@ function App() {
             <img src={botLogo} alt="Logo" className="bot-welcome-img" />
             <h1 className="slide-up">{APP_NAME}</h1>
             <p className="slide-up delay-1">{APP_TAGLINE}</p>
-            <button className="start-btn slide-up delay-2" onClick={startApp}>Mulai Percakapan</button>
+            <button className="start-btn slide-up delay-2" onClick={startApp}>
+              Mulai Percakapan
+            </button>
           </div>
         </div>
       ) : (
@@ -82,7 +84,7 @@ function App() {
           <header className="chat-header">
             <img src={botLogo} alt="Icon" className="bot-header-img" />
             <div className="info">
-              <h2 className="slide-right">{APP_NAME} {APP_MODE.charAt(0).toUpperCase() + APP_MODE.slice(1)}</h2>
+              <h2 className="slide-right">{APP_NAME} {APP_MODE.toUpperCase()}</h2>
               <div className="status slide-right delay-1">
                 <span className="dot pulse"></span> Online
               </div>
@@ -109,7 +111,7 @@ function App() {
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Ketik sesuatu..." 
+                placeholder="Ketik pesan..." 
               />
               <button 
                 className={`send-btn ${input.trim() ? 'active' : ''}`} 
