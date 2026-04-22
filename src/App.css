@@ -3,19 +3,13 @@
 :root {
   --primary-grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   --chat-bg: #f8fafc;
-  --text-dark: #0f172a;
 }
 
-/* Base Reset */
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
-body { 
-  margin: 0; 
-  font-family: 'Plus Jakarta Sans', sans-serif; 
-  background: #fff; 
-  overflow: hidden; 
-  height: 100vh;
-  width: 100vw;
+body, html { 
+  margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; 
+  background: #fff; overflow: hidden; height: 100vh; width: 100vw;
 }
 
 .app-shell { width: 100%; height: 100vh; position: relative; overflow: hidden; }
@@ -34,99 +28,73 @@ body {
 .loading-text { margin-top: 15px; font-weight: 600; color: #64748b; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* --- WELCOME PAGE (BALANCED HIERARCHY) --- */
+/* --- WELCOME PAGE (BALANCED) --- */
 .welcome-page {
-  position: absolute; inset: 0;
-  background: var(--primary-grad);
-  display: flex; flex-direction: column; 
-  align-items: center; justify-content: center;
-  color: white; text-align: center; z-index: 100;
-  padding: 20px;
+  position: absolute; inset: 0; background: var(--primary-grad);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: white; text-align: center; z-index: 100; padding: 20px;
 }
-
 .bot-welcome-img { 
-  width: clamp(150px, 45vw, 210px); /* Ukuran robot yang pas & proporsional */
-  height: auto; 
-  margin-bottom: 5px;
-  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.25));
+  width: clamp(150px, 45vw, 200px); 
+  height: auto; margin-bottom: 10px;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
 }
-
-.welcome-page h1 { 
-  font-size: clamp(2.2rem, 8vw, 3rem); 
-  font-weight: 800; 
-  margin: 0; 
-  letter-spacing: -0.04em; 
-}
-
-.welcome-page p { 
-  opacity: 0.85; 
-  margin: 10px 0 35px 0; 
-  max-width: 320px; 
-  line-height: 1.4; 
-  font-size: 1rem;
-}
-
+.welcome-page h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); font-weight: 800; margin: 0; }
+.welcome-page p { opacity: 0.85; margin: 10px 0 40px 0; max-width: 320px; line-height: 1.4; }
 .start-btn {
-  background: white; color: #1e40af; 
-  padding: 14px 40px; 
-  border-radius: 50px;
-  font-weight: 700; border: none; cursor: pointer; 
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-size: 1rem;
+  background: white; color: #1e40af; padding: 15px 45px; border-radius: 50px;
+  font-weight: 700; border: none; cursor: pointer; font-size: 1.05rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: 0.3s;
 }
-.start-btn:active { transform: scale(0.95); }
 
-/* --- CHAT LAYOUT (FIXED HEADER) --- */
+/* --- CHAT LAYOUT (HEADER FIX STATIS) --- */
 .main-chat-layout { 
-  width: 100%; height: 100vh; 
-  display: flex; flex-direction: column; 
-  background: white; 
+  width: 100%; 
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; /* Mencegah layout goyang */
 }
 
 .chat-header {
-  position: relative;
-  width: 100%;
-  padding: env(safe-area-inset-top, 15px) 20px 15px 20px; 
-  background: var(--primary-grad); color: white;
-  display: flex; align-items: center; gap: 12px; 
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  flex-shrink: 0; /* Header wajib diam */
+  width: 100%; 
+  padding: calc(env(safe-area-inset-top, 0px) + 25px) 20px 15px 20px;
+  background: var(--primary-grad); color: white; 
+  display: flex; align-items: center; gap: 12px;
+  z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-
-.bot-header-img { width: 38px; height: 38px; flex-shrink: 0; }
+.bot-header-img { width: 40px; height: 40px; flex-shrink: 0; /* Background dihapus sesuai request */ }
 .chat-header h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
 .status { font-size: 0.75rem; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
 
+/* --- AREA SCROLL CHAT --- */
 .chat-window { 
-  flex: 1; overflow-y: auto; 
-  padding: 20px; background: var(--chat-bg); 
-  display: flex; flex-direction: column; gap: 15px; 
+  flex: 1; 
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch;
+  padding: 20px; 
+  background: var(--chat-bg); 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
 }
-
-.msg { 
-  max-width: 85%; padding: 12px 16px; border-radius: 18px; 
-  font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; 
-}
+.msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; }
 .bot { background: white; align-self: flex-start; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
 .user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
 .footer { 
-  padding: 12px 20px env(safe-area-inset-bottom, 15px) 20px; 
+  flex-shrink: 0;
+  padding: 12px 20px calc(env(safe-area-inset-bottom, 0px) + 15px) 20px; 
   background: white; border-top: 1px solid #e2e8f0; 
 }
 .input-box { display: flex; background: #f1f5f9; border-radius: 15px; padding: 6px; }
 input { flex: 1; border: none; background: transparent; padding: 12px; outline: none; font-size: 16px; }
-.send-btn { 
-  width: 44px; height: 44px; border-radius: 12px; 
-  border: none; background: #cbd5e1; color: white; 
-  cursor: pointer; transition: 0.3s;
-  display: flex; align-items: center; justify-content: center;
-}
+.send-btn { width: 44px; height: 44px; border-radius: 12px; border: none; background: #cbd5e1; color: white; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
 .send-btn.active { background: var(--primary-grad); }
 
-/* --- ANIMATIONS --- */
+/* --- ANIMATIONS (DIKEMBALIKAN SEMUA) --- */
 .zoom-in { animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
 .fade-in { animation: fadeIn 0.5s ease-out; }
 .slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
@@ -147,15 +115,8 @@ input { flex: 1; border: none; background: transparent; padding: 12px; outline: 
 }
 
 .typing-indicator span { display: inline-block; width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
-/* Mobile Optimization */
 @media (max-width: 600px) {
-  .welcome-page { padding: 40px 25px; }
-  .bot-welcome-img { width: 170px; } /* Ukuran robot pas untuk layar HP */
-  .start-btn { min-width: 180px; width: auto; padding: 14px 30px; }
-  .chat-header { min-height: 80px; }
-  .msg { max-width: 90%; }
+  .chat-header { padding-top: calc(env(safe-area-inset-top, 0px) + 35px); }
 }
