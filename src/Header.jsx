@@ -6,11 +6,11 @@ import botLogo from './assets/bot ai.svg';
 const Header = () => (
   <header className="main-header-fixed">
     <div className="h-container">
-      <img src={botLogo} alt="Bot Logo" />
+      <img src={botLogo} alt="Logo" />
       <div className="h-text">
         <h3>{APP_NAME}</h3>
-        <div className="status-bar">
-          <span className="pulse-dot"></span> Online
+        <div className="status-indicator">
+          <span className="dot"></span> Online
         </div>
       </div>
     </div>
@@ -18,3 +18,4 @@ const Header = () => (
 );
 
 export default Header;
+
