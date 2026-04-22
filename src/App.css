@@ -1,137 +1,111 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
 :root {
-  --main: #1e40af;
-  --grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  --h-h: 55px; /* Lebih ramping */
-  --f-h: 70px;
+  --blue-grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --h-height: 65px;
+  --f-height: 80px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-/* WAJIB: Kunci total agar body tidak bisa ditarik/geser browser */
 body, html { 
   font-family: 'Plus Jakarta Sans', sans-serif;
-  height: 100%; width: 100%; 
-  overflow: hidden; 
+  height: 100%; width: 100%;
+  overflow: hidden; /* Mencegah body utama bergeser */
   position: fixed; 
 }
 
-.app-shell {
-  position: absolute; inset: 0;
-  height: 100dvh; width: 100vw;
-  background: #fff; display: flex; flex-direction: column;
-}
-
-/* --- LOADING PAGE --- */
-.loading-page {
-  position: fixed; inset: 0; background: #fff; z-index: 2000;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.spinner-orbit {
-  width: 35px; height: 35px; border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--main); border-radius: 50%;
-  animation: rotate 0.8s linear infinite;
-}
-@keyframes rotate { to { transform: rotate(360deg); } }
-
-/* --- WELCOME GATE --- */
-.welcome-gate {
-  position: absolute; inset: 0; background: var(--grad);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: white; padding: 25px; text-align: center;
-}
-.w-logo-small { width: 80px; height: auto; margin-bottom: 20px; }
-.w-hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
-.w-hero p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 35px; max-width: 250px; }
-.start-button {
-  background: white; color: var(--main); padding: 10px 40px;
-  border-radius: 50px; border: none; font-weight: 700; font-size: 0.95rem;
-}
-
-/* --- CHAT CANVAS --- */
-.chat-canvas {
+.main-wrapper {
+  width: 100%; height: 100dvh;
   display: flex; flex-direction: column;
-  height: 100%; width: 100%; overflow: hidden;
 }
 
-.header-fixed {
-  flex-shrink: 0; height: var(--h-h); background: var(--grad);
-  padding: env(safe-area-inset-top, 0) 15px 0;
-  display: flex; align-items: center; z-index: 100;
+/* --- LOADING --- */
+.app-loader {
+  position: fixed; inset: 0; background: white; z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.header-brand { display: flex; align-items: center; gap: 10px; }
-.h-icon { width: 26px; height: 26px; }
-.h-labels h3 { color: white; font-size: 0.9rem; font-weight: 700; margin: 0; }
-.h-status { display: flex; align-items: center; gap: 5px; margin-top: -2px; }
-.status-text { color: rgba(255,255,255,0.8); font-size: 0.65rem; font-weight: 600; }
+.spin-circle { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1e40af; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- WELCOME PAGE --- */
+.welcome-ui {
+  position: absolute; inset: 0; background: var(--blue-grad);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: white; text-align: center; padding: 20px;
+}
+.w-logo { width: 110px; margin-bottom: 20px; }
+.w-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+.w-desc { font-size: 1rem; opacity: 0.8; margin-bottom: 35px; max-width: 300px; }
+.w-start-btn { 
+  background: white; color: #1e40af; padding: 14px 40px; border-radius: 50px; 
+  border: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* --- CHAT INTERFACE --- */
+.chat-container {
+  display: flex; flex-direction: column;
+  height: 100%; width: 100%; position: relative;
+}
+
+.fixed-header {
+  flex-shrink: 0; height: var(--h-height); background: var(--blue-grad);
+  padding: env(safe-area-inset-top, 0) 20px 0;
+  display: flex; align-items: center; z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.header-flex { display: flex; align-items: center; gap: 12px; }
+.h-logo { width: 35px; height: 35px; }
+.h-text h3 { color: white; font-size: 1.1rem; font-weight: 700; margin: 0; }
+.h-online { color: white; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; opacity: 0.9; }
 
 /* REAL GLOW ONLINE */
-.dot-pulse {
-  width: 6px; height: 6px; background: #22c55e; border-radius: 50%;
-  box-shadow: 0 0 8px #22c55e;
-  position: relative;
+.glow-bulb {
+  width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
+  box-shadow: 0 0 12px #22c55e, 0 0 4px #22c55e;
+  animation: glow-pulse 2s infinite;
 }
-.dot-pulse::after {
-  content: ''; position: absolute; inset: 0; border-radius: 50%;
-  background: #22c55e; filter: blur(4px);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(2.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 18px #22c55e, 0 0 6px #22c55e; }
 }
 
-/* SCROLLER AREA */
-.chat-scroller {
-  flex: 1; overflow-y: auto; padding: 15px;
-  background: #ffffff; display: flex; flex-direction: column; gap: 12px;
+/* CHAT CONTENT: HANYA INI YANG BOLEH SCROLL */
+.chat-content {
+  flex: 1; overflow-y: auto; padding: 20px;
+  background: #ffffff; display: flex; flex-direction: column; gap: 15px;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
 }
 
-.msg { 
-  max-width: 80%; padding: 10px 14px; border-radius: 14px; 
-  font-size: 0.9rem; line-height: 1.4;
-}
-.bot { background: #f1f5f9; align-self: flex-start; color: #334155; border-bottom-left-radius: 4px; }
-.user { background: var(--main); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.bubble { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; }
+.bot { background: #f1f5f9; align-self: flex-start; color: #1e293b; border-bottom-left-radius: 4px; }
+.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-/* FOOTER FIXED */
-.footer-fixed {
+/* FOOTER TETAP DI BAWAH */
+.fixed-footer {
   flex-shrink: 0; background: white; border-top: 1px solid #f1f5f9;
-  padding: 8px 15px calc(env(safe-area-inset-bottom, 0) + 8px);
+  padding: 12px 15px calc(env(safe-area-inset-bottom, 0) + 12px);
+  z-index: 1000;
 }
-.input-row {
-  display: flex; background: #f8fafc; border-radius: 12px; border: 1.5px solid #e2e8f0; padding: 4px; align-items: center;
+.input-box {
+  display: flex; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 15px; padding: 5px; align-items: center;
 }
-input { flex: 1; border: none; background: transparent; padding: 8px 10px; outline: none; font-size: 16px; }
-.action-btn {
-  width: 34px; height: 34px; border-radius: 8px; border: none; background: #cbd5e1; color: white;
-  display: flex; align-items: center; justify-content: center;
+input { flex: 1; border: none; background: transparent; padding: 10px 12px; outline: none; font-size: 16px; color: #1e293b; }
+.send-icon-btn {
+  width: 44px; height: 44px; border-radius: 12px; border: none; background: #e2e8f0; color: white;
+  display: flex; align-items: center; justify-content: center; transition: 0.2s;
 }
-.action-btn.ready { background: var(--main); }
+.send-icon-btn.active { background: var(--blue-grad); }
 
-/* ANIMASI MUNCUL */
-.slide-in-bottom { 
-  animation: slideIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
-  opacity: 0;
-}
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ANIMASI */
+.pop-anim { animation: popIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* TYPING INDICATOR */
-.typing-container { display: flex; gap: 4px; padding: 5px 0; }
-.typing-dot { width: 5px; height: 5px; background: #94a3b8; border-radius: 50%; animation: dot-bounce 1.4s infinite; }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes dot-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.typing-indicator span { display: inline-block; width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-/* Mobile Adjustment untuk Notch */
+/* Mobile Viewport Fix */
 @media (max-width: 600px) {
-  :root { --h-h: 80px; }
-  .header-fixed { padding-top: calc(env(safe-area-inset-top, 0) + 25px); }
+  .fixed-header { height: 90px; padding-top: calc(env(safe-area-inset-top, 0) + 30px); }
 }
