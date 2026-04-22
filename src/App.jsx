@@ -4,8 +4,10 @@ import { APP_MODE, APP_NAME, APP_TAGLINE } from './config';
 import botLogo from './assets/bot ai.svg';
 
 const TypingAnimation = () => (
-  <div className="typing-dots">
-    <span></span><span></span><span></span>
+  <div className="bot-typing-indicator">
+    <span className="dot"></span>
+    <span className="dot"></span>
+    <span className="dot"></span>
   </div>
 );
 
@@ -17,6 +19,7 @@ function App() {
   const [appLoading, setAppLoading] = useState(false);
   const chatEndRef = useRef(null);
 
+  // Auto scroll ke bawah setiap ada pesan baru
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -27,8 +30,8 @@ function App() {
       setAppLoading(false);
       setIsStarted(true);
       setTimeout(() => {
-        setMessages([{ text: `Halo Wildan, ada yang bisa saya bantu?`, sender: 'bot' }]);
-      }, 500);
+        setMessages([{ text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, sender: 'bot' }]);
+      }, 600);
     }, 1500);
   };
 
@@ -48,7 +51,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Gagal terhubung ke server.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Koneksi ke server bermasalah.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -56,53 +59,60 @@ function App() {
 
   if (appLoading) {
     return (
-      <div className="init-loader">
-        <div className="loader-ring"></div>
-        <p>Memuat {APP_NAME}...</p>
+      <div className="fullscreen-loader">
+        <div className="loader-spinner"></div>
+        <p>Menyiapkan Sistem...</p>
       </div>
     );
   }
 
   return (
-    <div className="main-viewport">
+    <div className="app-main-container">
       {!isStarted ? (
-        <div className="landing-screen anim-fade">
-          <img src={botLogo} alt="Logo" className="landing-logo" />
-          <h1 className="anim-up">{APP_NAME}</h1>
-          <p className="anim-up delay-1">{APP_TAGLINE}</p>
-          <button className="start-btn anim-up delay-2" onClick={startApp}>Mulai</button>
+        <div className="welcome-gate anim-fade-in">
+          <img src={botLogo} alt="Logo" className="w-logo-large" />
+          <h1 className="w-title">{APP_NAME}</h1>
+          <p className="w-subtitle">{APP_TAGLINE}</p>
+          <button className="w-btn" onClick={startApp}>Mulai Percakapan</button>
         </div>
       ) : (
-        <div className="chat-layer">
-          <header className="fixed-top">
-            <div className="header-box">
-              <img src={botLogo} alt="Bot" className="bot-icon" />
-              <div className="bot-status-wrapper">
-                <h3>{APP_NAME}</h3>
-                <div className="status-badge">
-                  <span className="lamp-glow"></span>
-                  Online
+        <div className="chat-interface-wrapper">
+          {/* HEADER: MATI DI ATAS */}
+          <header className="app-header">
+            <div className="header-content">
+              <img src={botLogo} alt="Logo" className="header-logo" />
+              <div className="header-meta">
+                <span className="brand-name">{APP_NAME}</span>
+                <div className="status-container">
+                  <span className="status-glow"></span>
+                  <span className="status-text">Online</span>
                 </div>
               </div>
             </div>
           </header>
 
-          <main className="fixed-body">
+          {/* AREA CHAT: HANYA INI YANG BISA SCROLL */}
+          <main className="chat-scroll-area">
             {messages.map((m, i) => (
-              <div key={i} className={`chat-row ${m.sender} anim-pop`}>
-                <div className="bubble-text">{m.text}</div>
+              <div key={i} className={`chat-row ${m.sender} anim-pop-up`}>
+                <div className="bubble">
+                  {m.text}
+                </div>
               </div>
             ))}
             {loading && (
-              <div className="chat-row bot anim-pop">
-                <div className="bubble-text"><TypingAnimation /></div>
+              <div className="chat-row bot anim-pop-up">
+                <div className="bubble">
+                  <TypingAnimation />
+                </div>
               </div>
             )}
             <div ref={chatEndRef} />
           </main>
 
-          <footer className="fixed-bottom">
-            <div className="input-group-custom">
+          {/* FOOTER: MATI DI BAWAH (INPUT) */}
+          <footer className="app-footer">
+            <div className="input-group">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
@@ -110,7 +120,7 @@ function App() {
                 placeholder="Ketik pesan..." 
               />
               <button 
-                className={`btn-send-custom ${input.trim() ? 'active' : ''}`} 
+                className={`send-btn ${input.trim() ? 'active' : ''}`} 
                 onClick={handleSend}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
