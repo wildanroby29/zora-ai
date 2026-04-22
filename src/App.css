@@ -1,95 +1,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
-:root {
-  --primary: #1e40af;
-  --header-h: 70px;
-  --footer-h: 85px;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-/* KUNCI BODY AGAR TIDAK GOYANG */
-body, html { 
+/* KUNCI WINDOW */
+html, body {
+  height: 100%; width: 100%; margin: 0; padding: 0;
+  overflow: hidden; position: fixed; /* WAJIB: Cegah browser nge-scroll body */
   font-family: 'Plus Jakarta Sans', sans-serif;
-  height: 100%; width: 100%; overflow: hidden; position: fixed; 
 }
 
-.app-shell {
-  width: 100%; height: 100dvh; background: #ffffff; position: relative;
-}
-
-/* --- WELCOME SCREEN --- */
-.welcome-screen {
-  position: absolute; inset: 0; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: white; z-index: 2000; padding: 20px; text-align: center;
-}
-.w-logo { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2)); }
-.w-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-.start-btn { background: white; color: var(--primary); padding: 14px 50px; border-radius: 50px; border: none; font-weight: 700; font-size: 1rem; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-/* --- HEADER (FIXED AT TOP) --- */
-.fixed-header {
+/* HEADER LAYER (MENGAMBANG SENDIRI) */
+.fixed-header-layer {
   position: fixed; top: 0; left: 0; right: 0;
-  height: var(--header-h); background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  padding: env(safe-area-inset-top, 0) 20px 0;
-  display: flex; align-items: center; z-index: 1000;
+  height: 70px; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  z-index: 1000; display: flex; align-items: center; padding: 0 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.header-inner { display: flex; align-items: center; gap: 12px; }
-.h-logo { width: 34px; height: 34px; }
-.h-meta h3 { color: white; font-size: 1.1rem; font-weight: 700; margin: 0; }
-.h-online { color: white; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; opacity: 0.9; }
-.glow-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 10px #22c55e; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+.h-content { display: flex; align-items: center; gap: 12px; color: white; }
+.h-content img { width: 32px; height: 32px; }
+.h-info h3 { font-size: 1rem; margin: 0; font-weight: 700; }
+.h-info p { font-size: 0.75rem; margin: 0; display: flex; align-items: center; gap: 5px; }
+.dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
 
-/* --- CHAT AREA (INDEPENDENT SCROLL) --- */
-.scrollable-chat {
+/* CHAT BODY LAYER (LAYER TENGAH) */
+.chat-body-layer {
   position: absolute;
-  top: var(--header-h); bottom: var(--footer-h);
+  top: 70px;    /* Sesuai tinggi Header */
+  bottom: 85px; /* Sesuai tinggi Footer */
   left: 0; right: 0;
-  overflow-y: auto; padding: 20px 15px;
+  overflow-y: auto; 
+  padding: 20px 15px;
   display: flex; flex-direction: column; gap: 15px;
-  background: #ffffff; -webkit-overflow-scrolling: touch;
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
 }
 
-.msg-row { display: flex; width: 100%; }
+/* FOOTER LAYER (MENGAMBANG SENDIRI DI BAWAH) */
+.fixed-footer-layer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 85px; background: white; border-top: 1px solid #f1f5f9;
+  z-index: 1000; padding: 10px 15px;
+  display: flex; align-items: center;
+}
+.input-group {
+  width: 100%; display: flex; background: #f8fafc; 
+  border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 5px;
+}
+.input-group input { flex: 1; border: none; background: transparent; padding: 10px; font-size: 16px; outline: none; }
+.input-group button { 
+  width: 40px; height: 40px; border-radius: 12px; border: none; 
+  background: #e2e8f0; color: white; display: flex; align-items: center; justify-content: center;
+}
+.input-group button.send-active { background: #1e40af; }
+.input-group button svg { width: 20px; height: 20px; }
+
+/* BUBBLE CHAT */
+.msg-row { display: flex; width: 100%; animation: slideUp 0.3s ease; }
 .bubble { max-width: 85%; padding: 12px 18px; border-radius: 20px; font-size: 0.95rem; line-height: 1.5; }
 .bot .bubble { background: #f1f5f9; color: #1e293b; align-self: flex-start; border-bottom-left-radius: 4px; }
-.user .bubble { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; margin-left: auto; }
+.user .bubble { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 4px; margin-left: auto; }
 
-/* --- FOOTER (FIXED AT BOTTOM) --- */
-.fixed-footer {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  height: var(--footer-h); background: white; border-top: 1px solid #f1f5f9;
-  padding: 10px 15px calc(env(safe-area-inset-bottom, 0) + 12px);
-  z-index: 1000;
-}
-.input-box-container {
-  display: flex; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 5px; align-items: center;
-}
-input { flex: 1; border: none; background: transparent; padding: 10px 14px; outline: none; font-size: 16px; color: #1e293b; }
+/* WELCOME SCREEN */
+.welcome-screen { position: fixed; inset: 0; background: #1e40af; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
+.gate-logo { width: 100px; margin-bottom: 20px; }
+.welcome-screen button { background: white; color: #1e40af; padding: 12px 50px; border-radius: 50px; border: none; font-weight: 700; margin-top: 20px; }
 
-/* IKON KIRIM PROFESIONAL */
-.send-action-btn {
-  width: 42px; height: 42px; border-radius: 12px; border: none; background: #e2e8f0; color: white;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s;
-}
-.send-action-btn.active { background: var(--primary); }
-.send-action-btn svg { width: 22px; height: 22px; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- ANIMASI --- */
-.anim-pop { animation: popIn 0.3s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards; }
-@keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-.bot-typing-status { display: flex; gap: 4px; padding: 5px 0; }
-.bot-typing-status .dot { width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite; }
-.bot-typing-status .dot:nth-child(2) { animation-delay: 0.2s; }
-.bot-typing-status .dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-
-/* NOTCH HP FIX */
+/* RESPONSIF UNTUK NOTCH HP */
 @media (max-width: 600px) {
-  .fixed-header { height: 95px; padding-top: calc(env(safe-area-inset-top, 0) + 30px); }
-  .scrollable-chat { top: 95px; }
+  .fixed-header-layer { height: 90px; padding-top: 25px; }
+  .chat-body-layer { top: 90px; }
 }
