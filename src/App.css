@@ -1,121 +1,114 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
 :root {
-  --primary-grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  --header-height: 80px;
-  --footer-height: 85px;
+  --primary: #1e40af;
+  --grad: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --h-height: 65px; /* Tinggi Header Diperkecil */
+  --f-height: 75px; /* Tinggi Footer */
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body, html { 
-  margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; 
-  background: #fff; overflow: hidden; height: 100vh; width: 100vw;
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  background: #ffffff; overflow: hidden; height: 100vh; width: 100vw;
 }
 
-.app-shell { width: 100%; height: 100%; position: relative; }
+/* CONTAINER UTAMA */
+.app-container { width: 100%; height: 100vh; position: relative; }
 
-/* --- LOADING SCREEN --- */
-.loading-screen {
-  position: fixed; inset: 0; background: white;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 9999;
-}
-.loader { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
+/* LOADING SCREEN */
+.loading-screen { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; }
+.loader { width: 35px; height: 35px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* --- WELCOME PAGE (DIKUNCI AGAR ROBOT MUNCUL) --- */
-.welcome-page {
-  position: fixed; inset: 0; background: var(--primary-grad);
+/* WELCOME SCREEN - Hirarki yang benar */
+.welcome-screen {
+  position: absolute; inset: 0; background: var(--grad);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: white; text-align: center; z-index: 1000; padding: 20px;
+  color: white; padding: 30px; text-align: center;
 }
-.welcome-content {
-  display: flex; flex-direction: column; align-items: center; width: 100%;
-}
-.bot-welcome-img { 
-  width: 170px; height: auto; 
-  margin-bottom: 20px; 
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
-  display: block; /* Memastikan image tidak hidden */
-}
-.welcome-title { font-size: 2.8rem; font-weight: 800; margin-bottom: 10px; display: block; }
-.welcome-desc { opacity: 0.9; margin-bottom: 40px; max-width: 320px; line-height: 1.5; display: block; }
-.start-btn {
-  background: white; color: #1e40af; padding: 18px 60px; border-radius: 50px;
-  font-weight: 700; border: none; cursor: pointer; font-size: 1.1rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: 0.3s;
+.w-logo { width: 120px; height: auto; margin-bottom: 20px; }
+.w-text h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; }
+.w-text p { font-size: 0.95rem; opacity: 0.8; margin-bottom: 30px; }
+.w-btn { 
+  background: white; color: var(--primary); 
+  padding: 12px 35px; /* Ukuran tombol lebih proporsional */
+  border-radius: 50px; border: none; font-weight: 700; cursor: pointer; 
+  font-size: 1rem; box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }
 
-/* --- CHAT LAYOUT (FIXED STRUCTURE) --- */
-.main-chat-layout { width: 100%; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
-.chat-header {
-  flex-shrink: 0; width: 100%; height: var(--header-height);
-  background: var(--primary-grad); color: white; 
-  display: flex; align-items: center; gap: 12px;
-  padding: env(safe-area-inset-top, 0px) 20px 0 20px;
-  z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-.bot-header-img { width: 42px; height: 42px; }
-.chat-header h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
-
-/* DOT PULSE GLOW (SINAR ONLINE) */
-.dot { width: 9px; height: 9px; background: #22c55e; border-radius: 50%; display: inline-block; }
-.pulse-glow {
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
-  animation: glow-anim 2s infinite ease-in-out;
-}
-@keyframes glow-anim {
-  0%, 100% { transform: scale(0.9); box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
-  50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(34, 197, 94, 1); }
+/* CHAT LAYOUT GRID - Menjamin kestabilan elemen */
+.chat-layout { 
+  display: grid;
+  grid-template-rows: var(--h-height) 1fr var(--f-height);
+  height: 100vh;
+  width: 100%;
 }
 
-/* CHAT WINDOW (ONLY THIS SCROLLS) */
-.chat-window { 
-  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 25px 20px; background: #ffffff; 
-  display: flex; flex-direction: column; gap: 18px; 
+/* HEADER - Ringkas & Kaku */
+.fixed-header {
+  background: var(--grad); color: white;
+  padding: env(safe-area-inset-top, 0) 20px 0 20px;
+  display: flex; align-items: center; z-index: 1000;
 }
-.msg { max-width: 85%; padding: 14px 18px; border-radius: 20px; font-size: 1rem; line-height: 1.5; }
-.bot { background: #f1f5f9; align-self: flex-start; color: #1e293b; border-bottom-left-radius: 5px; }
-.user { background: #1e40af; color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
+.header-content { display: flex; align-items: center; gap: 10px; }
+.h-logo { width: 32px; height: 32px; }
+.h-info h3 { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.h-status { font-size: 0.7rem; display: flex; align-items: center; gap: 5px; opacity: 0.9; }
 
-/* MESSAGE ANIMATIONS */
-.bot-msg { animation: botPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-.user-msg { animation: userPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-@keyframes botPop { from { opacity: 0; transform: scale(0.8) translateX(-20px); } to { opacity: 1; transform: scale(1) translateX(0); } }
-@keyframes userPop { from { opacity: 0; transform: scale(0.8) translateX(20px); } to { opacity: 1; transform: scale(1) translateX(0); } }
-
-/* FOOTER FIXED */
-.footer { 
-  flex-shrink: 0; width: 100%; height: var(--footer-height);
-  padding: 10px 20px calc(env(safe-area-inset-bottom, 0px) + 15px) 20px;
-  background: white; border-top: 1px solid #e2e8f0; z-index: 500;
+/* SINAR ONLINE BERSINAR */
+.glow-dot { 
+  width: 7px; height: 7px; background: #22c55e; border-radius: 50%; 
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+  animation: glowing 2s infinite;
 }
-.input-box { display: flex; background: #f1f5f9; border-radius: 18px; padding: 6px; align-items: center; }
-input { flex: 1; border: none; background: transparent; padding: 12px; outline: none; font-size: 16px; }
-.send-btn { width: 45px; height: 45px; border-radius: 14px; border: none; background: #cbd5e1; color: white; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; }
-.send-btn.active { background: var(--primary-grad); transform: scale(1.05); }
+@keyframes glowing {
+  0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); transform: scale(1); }
+  50% { box-shadow: 0 0 15px rgba(34, 197, 94, 1); transform: scale(1.1); }
+}
 
-/* TRANSISI HALUS */
-.zoom-in { animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-.fade-in { animation: fadeIn 0.5s ease-out; }
-.slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
-.slide-right { animation: slideRight 0.5s ease-out forwards; opacity: 0; }
+/* CHAT WINDOW - Hanya area ini yang bisa scroll */
+.chat-area { 
+  overflow-y: auto; 
+  background: #fff; padding: 20px;
+  display: flex; flex-direction: column; gap: 15px;
+  -webkit-overflow-scrolling: touch;
+}
+.bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.92rem; line-height: 1.5; }
+.bot { background: #f1f5f9; align-self: flex-start; border-bottom-left-radius: 4px; }
+.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes slideRight { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+/* FOOTER - Kaku di bawah */
+.fixed-footer {
+  background: white; border-top: 1px solid #eee;
+  padding: 10px 20px calc(env(safe-area-inset-bottom, 0) + 10px) 20px;
+  display: flex; align-items: center; z-index: 1000;
+}
+.input-group { 
+  display: flex; width: 100%; background: #f1f5f9; 
+  border-radius: 12px; padding: 4px 6px; align-items: center; 
+}
+input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 16px; }
+.s-btn { 
+  width: 38px; height: 38px; border-radius: 10px; border: none; 
+  background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center;
+}
+.s-btn.active { background: var(--grad); }
 
-.typing-indicator span { display: inline-block; width: 7px; height: 7px; background: #cbd5e1; border-radius: 50%; margin: 0 3px; animation: bounce 1.3s infinite; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+/* ANIMASI MUNCUL */
+.message-anim { animation: msgUp 0.3s ease-out forwards; }
+@keyframes msgUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: opac 0.4s ease; }
+@keyframes opac { from { opacity: 0; } to { opacity: 1; } }
+.zoom-in { animation: zIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes zIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-/* Mobile Viewport Fix */
+.typing-indicator span { display: inline-block; width: 5px; height: 5px; background: #cbd5e1; border-radius: 50%; margin: 0 2px; animation: bounce 1.3s infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* Fix Khusus Mobile */
 @media (max-width: 600px) {
-  :root { --header-height: 105px; }
-  .chat-header { padding-top: calc(env(safe-area-inset-top, 0px) + 38px); }
-  .welcome-title { font-size: 2.3rem; }
-  .bot-welcome-img { width: 150px; }
+  :root { --h-height: 85px; }
+  .fixed-header { padding-top: calc(env(safe-area-inset-top, 0) + 25px); }
 }

@@ -27,11 +27,8 @@ function App() {
       setAppLoading(false);
       setIsStarted(true);
       setTimeout(() => {
-        setMessages([{ 
-          text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
-          sender: 'bot' 
-        }]);
-      }, 800);
+        setMessages([{ text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, sender: 'bot' }]);
+      }, 500);
     }, 1200);
   };
 
@@ -51,7 +48,7 @@ function App() {
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Koneksi terputus.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Gagal memuat pesan.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -61,64 +58,56 @@ function App() {
     return (
       <div className="loading-screen">
         <div className="loader"></div>
-        <p className="loading-text">Menyiapkan {APP_NAME}...</p>
+        <p>Memuat {APP_NAME}...</p>
       </div>
     );
   }
 
   return (
-    <div className="app-shell">
+    <div className="app-container">
       {!isStarted ? (
-        <div className="welcome-page">
-          <div className="welcome-content zoom-in">
-            <img src={botLogo} alt="Robot Logo" className="bot-welcome-img" />
-            <h1 className="welcome-title slide-up">{APP_NAME}</h1>
-            <p className="welcome-desc slide-up delay-1">{APP_TAGLINE}</p>
-            <button className="start-btn slide-up delay-2" onClick={startApp}>
-              Mulai Percakapan
-            </button>
+        <div className="welcome-screen zoom-in">
+          <img src={botLogo} alt="Logo" className="w-logo" />
+          <div className="w-text">
+            <h1>{APP_NAME}</h1>
+            <p>{APP_TAGLINE}</p>
           </div>
+          <button className="w-btn" onClick={startApp}>Mulai Percakapan</button>
         </div>
       ) : (
-        <div className="main-chat-layout fade-in">
-          <header className="chat-header">
-            <img src={botLogo} alt="Icon" className="bot-header-img" />
-            <div className="info">
-              <h2 className="slide-right">{APP_NAME} {APP_MODE.toUpperCase()}</h2>
-              <div className="status slide-right delay-1">
-                <span className="dot pulse-glow"></span> Online
+        <div className="chat-layout fade-in">
+          <header className="fixed-header">
+            <div className="header-content">
+              <img src={botLogo} alt="Icon" className="h-logo" />
+              <div className="h-info">
+                <h3>{APP_NAME} {APP_MODE.toUpperCase()}</h3>
+                <div className="h-status">
+                  <span className="glow-dot"></span> Online
+                </div>
               </div>
             </div>
           </header>
 
-          <div className="chat-window">
+          <main className="chat-area">
             {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.sender === 'user' ? 'user user-msg' : 'bot bot-msg'}`}>
+              <div key={i} className={`bubble ${m.sender} message-anim`}>
                 {m.text}
               </div>
             ))}
-            {loading && (
-              <div className="msg bot bot-msg">
-                <TypingAnimation />
-              </div>
-            )}
+            {loading && <div className="bubble bot message-anim"><TypingAnimation /></div>}
             <div ref={chatEndRef} />
-          </div>
+          </main>
 
-          <footer className="footer">
-            <div className="input-box">
+          <footer className="fixed-footer">
+            <div className="input-group">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Tanya sesuatu..." 
+                placeholder="Ketik pesan..." 
               />
-              <button 
-                className={`send-btn ${input.trim() ? 'active' : ''}`} 
-                onClick={handleSend}
-                disabled={!input.trim() || loading}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <button className={`s-btn ${input.trim() ? 'active' : ''}`} onClick={handleSend}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
                 </svg>
               </button>
