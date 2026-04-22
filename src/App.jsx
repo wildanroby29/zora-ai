@@ -1,133 +1,117 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
-import { APP_MODE, APP_NAME, APP_TAGLINE } from './config';
-import botLogo from './assets/bot ai.svg';
-
-const TypingAnimation = () => (
-  <div className="typing-indicator">
-    <span></span><span></span><span></span>
-  </div>
-);
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isStarted, setIsStarted] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef(null);
 
+  const chatEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // 🔥 Fix viewport seperti ChatGPT
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', `${vh}px`);
+    };
+
+    updateHeight();
+    window.visualViewport?.addEventListener('resize', updateHeight);
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
+
+  // Auto scroll ke bawah
   useEffect(() => {
     chatEndRef.current?.scrollIntoView();
   }, [messages, loading]);
 
-  const startApp = () => {
-    setIsTransitioning(true);
+  // Auto resize textarea
+  const handleInput = (e) => {
+    setInput(e.target.value);
 
-    setTimeout(() => {
-      setIsStarted(true);
-      setIsTransitioning(false);
+    const el = inputRef.current;
+    if (!el) return;
 
-      setTimeout(() => {
-        setMessages([{ 
-          text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
-          sender: 'bot' 
-        }]);
-      }, 400);
-
-    }, 500);
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
   };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
-    const currentInput = input;
-    setMessages(prev => [...prev, { text: currentInput, sender: 'user' }]);
+    const text = input;
+
+    setMessages(prev => [...prev, { text, sender: 'user' }]);
     setInput('');
     setLoading(true);
 
-    try {
-      const res = await fetch("https://wildanrobians29-chat-backend.hf.space/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: currentInput, category: APP_MODE })
-      });
+    // reset tinggi textarea
+    if (inputRef.current) inputRef.current.style.height = "auto";
 
-      const data = await res.json();
-      setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
-
-    } catch {
-      setMessages(prev => [...prev, { text: "Maaf, koneksi terputus.", sender: 'bot' }]);
-    } finally {
+    // simulasi bot
+    setTimeout(() => {
+      setMessages(prev => [...prev, { text: "Ini respon dari bot 🤖", sender: 'bot' }]);
       setLoading(false);
+    }, 1000);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
   return (
     <div className="app-shell">
+      <div className="main-chat-layout">
 
-      {!isStarted && (
-        <div className={`welcome-page ${isTransitioning ? 'exit' : 'enter'}`}>
-          <div className="welcome-content">
-            <img src={botLogo} alt="Logo" className="bot-welcome-img" />
-            <h1>{APP_NAME}</h1>
-            <p>{APP_TAGLINE}</p>
-            <button className="start-btn" onClick={startApp}>
-              Mulai Percakapan
+        {/* HEADER */}
+        <header className="chat-header">
+          <h2>ChatGPT Clone</h2>
+          <span className="status">Online</span>
+        </header>
+
+        {/* CHAT */}
+        <div className="chat-window">
+          {messages.map((m, i) => (
+            <div key={i} className={`msg ${m.sender}`}>
+              {m.text}
+            </div>
+          ))}
+
+          {loading && (
+            <div className="msg bot">Typing...</div>
+          )}
+
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* FOOTER */}
+        <footer className="footer">
+          <div className="input-box">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={handleInput}
+              onKeyDown={handleKeyDown}
+              placeholder="Ketik pesan..."
+              rows={1}
+            />
+            <button
+              className={`send-btn ${input.trim() ? 'active' : ''}`}
+              onClick={handleSend}
+            >
+              ➤
             </button>
           </div>
-        </div>
-      )}
+        </footer>
 
-      {isStarted && (
-        <div className="main-chat-layout enter">
-
-          <header className="chat-header">
-            <img src={botLogo} alt="Icon" className="bot-header-img" />
-            <div>
-              <h2>{APP_NAME}</h2>
-              <div className="status">
-                <span className="dot"></span> Online
-              </div>
-            </div>
-          </header>
-
-          <div className="chat-window">
-            {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.sender}`}>
-                {m.text}
-              </div>
-            ))}
-
-            {loading && (
-              <div className="msg bot">
-                <TypingAnimation />
-              </div>
-            )}
-
-            <div ref={chatEndRef} />
-          </div>
-
-          <footer className="footer">
-            <div className="input-box">
-              <input
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleSend()}
-                placeholder="Tanya sesuatu..."
-              />
-              <button
-                className={`send-btn ${input.trim() ? 'active' : ''}`}
-                onClick={handleSend}
-              >
-                ➤
-              </button>
-            </div>
-          </footer>
-
-        </div>
-      )}
-
+      </div>
     </div>
   );
 }
