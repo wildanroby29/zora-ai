@@ -18,14 +18,14 @@ function App() {
   const handleStart = () => {
     setIsStarted(true);
     setTimeout(() => {
-      setMessages([{ text: `Halo Wildan, selamat datang di ${APP_NAME}. Ada yang bisa dibantu?`, sender: 'bot' }]);
+      setMessages([{ text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu?`, sender: 'bot' }]);
     }, 500);
   };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
-    const currentInput = input;
-    setMessages(prev => [...prev, { text: currentInput, sender: 'user' }]);
+    const userText = input;
+    setMessages(prev => [...prev, { text: userText, sender: 'user' }]);
     setInput('');
     setLoading(true);
 
@@ -33,12 +33,12 @@ function App() {
       const res = await fetch("https://wildanrobians29-chat-backend.hf.space/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: currentInput, category: APP_MODE })
+        body: JSON.stringify({ message: userText, category: APP_MODE })
       });
       const data = await res.json();
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (e) {
-      setMessages(prev => [...prev, { text: "Koneksi bermasalah.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Gagal terhubung ke server.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -46,11 +46,11 @@ function App() {
 
   if (!isStarted) {
     return (
-      <div className="start-overlay">
-        <img src={botLogo} alt="Logo" className="gate-logo" />
+      <div className="gate-screen">
+        <img src={botLogo} alt="Logo" />
         <h1>{APP_NAME}</h1>
         <p>{APP_TAGLINE}</p>
-        <button onClick={handleStart}>Mulai Percakapan</button>
+        <button onClick={handleStart}>Mulai</button>
       </div>
     );
   }
@@ -59,43 +59,40 @@ function App() {
     <>
       <Header />
       
-      {/* Wrapper ini yang mengontrol sinkronisasi Body dan Footer */}
-      <div className="main-content-layout">
-        <main className="chat-feed">
+      <main className="body-chat-layer">
+        <div className="chat-content">
           {messages.map((m, i) => (
-            <div key={i} className={`bubble-wrap ${m.sender} anim-pop`}>
-              <div className="bubble-content">{m.text}</div>
+            <div key={i} className={`bubble-row ${m.sender}`}>
+              <div className="bubble-box">{m.text}</div>
             </div>
           ))}
           {loading && (
-            <div className="bubble-wrap bot anim-pop">
-              <div className="bubble-content typing-box">
-                <span></span><span></span><span></span>
-              </div>
+            <div className="bubble-row bot">
+              <div className="bubble-box typing">Mengetik...</div>
             </div>
           )}
           <div ref={chatEndRef} />
-        </main>
+        </div>
+      </main>
 
-        <footer className="input-footer">
-          <div className="input-pill">
-            <input 
-              value={input} 
-              onChange={(e) => setInput(e.target.value)} 
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
-              placeholder="Tulis pesan..." 
-            />
-            <button 
-              className={input.trim() && !loading ? 'btn-send active' : 'btn-send'} 
-              onClick={handleSend}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </footer>
-      </div>
+      <footer className="footer-input-layer">
+        <div className="pill-container">
+          <input 
+            value={input} 
+            onChange={(e) => setInput(e.target.value)} 
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
+            placeholder="Tulis pesan..." 
+          />
+          <button 
+            className={input.trim() ? 'send-btn active' : 'send-btn'} 
+            onClick={handleSend}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </footer>
     </>
   );
 }

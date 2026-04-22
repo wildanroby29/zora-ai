@@ -4,8 +4,8 @@
   left: 0;
   right: 0;
   height: 70px;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  z-index: 10000;
+  background: #1e40af;
+  z-index: 10000; /* Paling depan */
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -14,11 +14,10 @@
 .h-container { display: flex; align-items: center; gap: 12px; color: white; }
 .h-container img { width: 34px; height: 34px; }
 .h-text h3 { font-size: 1.1rem; font-weight: 800; margin: 0; }
-.status-bar { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; opacity: 0.9; }
+.status-bar { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
 .pulse-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulse 2s infinite; }
-
 @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
 @media (max-width: 600px) {
-  .main-header-fixed { height: 95px; padding-top: 30px; }
+  .main-header-fixed { height: 90px; padding-top: 25px; }
 }
