@@ -49,7 +49,7 @@ useEffect(() => {
       setIsStarted(true);
       setTimeout(() => {
         setMessages([{ 
-          text: `Halo Wildan, ada yang bisa ${APP_NAME} bantu hari ini?`, 
+          text: `Selamat datang, ada yang bisa kami bantu hari ini?`, 
           sender: 'bot' 
         }]);
       }, 600);
@@ -118,7 +118,7 @@ useEffect(() => {
             <img src={botLogo} alt="Icon" className="bot-header-img" />
             <div className="info">
               <h2 className="slide-right">
-                {APP_NAME} {APP_MODE.charAt(0).toUpperCase() + APP_MODE.slice(1)}
+                {APP_NAME}
               </h2>
               <div className="status slide-right delay-1">
                 <span className="dot pulse"></span> Online
