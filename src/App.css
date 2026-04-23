@@ -116,6 +116,14 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
+.bot-header-img { width: 38px; height: 38px; flex-shrink: 0; }
+
+.chat-header h2 {
+font-size: 1.1rem;
+margin: 0;
+font-weight: 700;
+}
+
 .status { 
   font-size: 0.75rem; 
   opacity: 0.9; 
