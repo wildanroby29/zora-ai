@@ -59,7 +59,6 @@ body {
   will-change: transform;
 }
 
-/* wrapper kalau kamu pakai div pembungkus */
 .robot-wrapper {
   animation: robotIntro 0.9s cubic-bezier(0.16, 1, 0.3, 1),
              floatRobot 3s ease-in-out infinite;
