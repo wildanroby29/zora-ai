@@ -195,6 +195,14 @@ textarea {
   resize: none;
   max-height: 120px;
   line-height: 1.4;
+
+  font-family: inherit; /* 🔥 ini kuncinya */
+}
+
+textarea::placeholder {
+  color: #94a3b8;
+  font-family: inherit;
+  letter-spacing: 0.1px;
 }
 
 .send-btn { 
