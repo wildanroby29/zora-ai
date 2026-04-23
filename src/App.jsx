@@ -93,18 +93,24 @@ useEffect(() => {
 
   return (
     <div className="app-shell">
-      {!isStarted ? (
-        <div className="welcome-page">
-          <div className="welcome-content zoom-in">
-            <img src={botLogo} alt="Logo" className="bot-welcome-img" />
-            <h1 className="slide-up">{APP_NAME}</h1>
-            <p className="slide-up delay-1">{APP_TAGLINE}</p>
-            <button className="start-btn slide-up delay-2" onClick={startApp}>
-              Mulai Percakapan
-            </button>
-          </div>
+  {!isStarted ? (
+    <div className="welcome-page">
+      <div className="welcome-content zoom-in">
+
+        <div className="robot-wrapper">
+          <img src={botLogo} alt="Logo" className="bot-welcome-img" />
         </div>
-      ) : (
+
+        <h1 className="slide-up">{APP_NAME}</h1>
+        <p className="slide-up delay-1">{APP_TAGLINE}</p>
+
+        <button className="start-btn slide-up delay-2" onClick={startApp}>
+          Mulai Percakapan
+        </button>
+
+      </div>
+    </div>
+  ) : (
         <div className="main-chat-layout fade-in">
 
           {/* HEADER */}
