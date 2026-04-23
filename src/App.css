@@ -163,11 +163,14 @@ font-weight: 700;
 }
 
 /* ✅ FOOTER FIX */
-.footer { 
+.footer {
   flex-shrink: 0;
-  padding: 12px 20px env(safe-area-inset-bottom, 15px) 20px; 
-  background: white; 
-  border-top: 1px solid #e2e8f0; 
+  padding: 12px 20px;
+  padding-bottom: 12px; /* 🔥 fix Android */
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  position: relative;
+  z-index: 10;
 }
 
 .input-box { 
