@@ -9,25 +9,22 @@
 }
 
 /* Base Reset */
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: #fff;
-  overflow: hidden;
+body { 
+  margin: 0; 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  background: #fff; 
+  overflow: hidden; 
   width: 100vw;
 }
 
 /* APP SHELL */
-.app-shell {
+.app-shell { 
   height: var(--app-height);
   padding-top: var(--app-offset-top);
-  position: relative;
-  overflow: hidden;
+  position: relative; 
+  overflow: hidden; 
 }
 
 /* LOADING */
@@ -58,9 +55,7 @@ body {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* WELCOME */
@@ -86,7 +81,7 @@ body {
   will-change: transform;
 }
 
-/* ROBOT WRAPPER (FIXED) */
+/* ✅ FIXED ROBOT WRAPPER */
 .robot-wrapper {
   animation: robotIntro 0.9s cubic-bezier(0.16, 1, 0.3, 1),
              floatRobot 3s ease-in-out infinite;
@@ -94,45 +89,44 @@ body {
 }
 
 /* TEXT */
-.welcome-page h1 {
-  font-size: clamp(2.2rem, 8vw, 3rem);
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.04em;
+.welcome-page h1 { 
+  font-size: clamp(2.2rem, 8vw, 3rem); 
+  font-weight: 800; 
+  margin: 0; 
+  letter-spacing: -0.04em; 
 }
 
-.welcome-page p {
-  opacity: 0.85;
-  margin: 10px 0 35px 0;
-  max-width: 320px;
-  line-height: 1.4;
+.welcome-page p { 
+  opacity: 0.85; 
+  margin: 10px 0 35px 0; 
+  max-width: 320px; 
+  line-height: 1.4; 
   font-size: 1rem;
 }
 
 /* BUTTON */
 .start-btn {
-  background: white;
-  color: #1e40af;
-  padding: 14px 40px;
+  background: white; 
+  color: #1e40af; 
+  padding: 14px 40px; 
   border-radius: 50px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
+  font-weight: 700; 
+  border: none; 
+  cursor: pointer; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  transition: 0.3s ease;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 1rem;
 }
 
-.start-btn:active {
-  transform: scale(0.95);
-}
+.start-btn:active { transform: scale(0.95); }
 
-/* CHAT */
-.main-chat-layout {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: white;
+/* CHAT LAYOUT */
+.main-chat-layout { 
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  background: white; 
 }
 
 /* HEADER (TIDAK DIUBAH) */
@@ -148,9 +142,27 @@ body {
   z-index: 1000;
 }
 
-.bot-header-img {
-  width: 38px;
-  height: 38px;
+.bot-header-img { width: 38px; height: 38px; flex-shrink: 0; }
+
+.chat-header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.status { 
+  font-size: 0.75rem; 
+  opacity: 0.9; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+
+.dot { 
+  width: 8px; 
+  height: 8px; 
+  background: #22c55e; 
+  border-radius: 50%; 
 }
 
 /* CHAT WINDOW */
@@ -165,7 +177,7 @@ body {
 }
 
 /* MESSAGE */
-.msg {
+.msg { 
   max-width: 80%;
   padding: 12px 16px;
   border-radius: 18px;
@@ -176,14 +188,14 @@ body {
   animation: fadeInUp 0.25s ease;
 }
 
-.bot {
-  background: white;
+.bot { 
+  background: #ffffff;
   align-self: flex-start;
   border: 1px solid #e5e7eb;
   border-bottom-left-radius: 6px;
 }
 
-.user {
+.user { 
   background: #2563eb;
   color: white;
   align-self: flex-end;
@@ -199,10 +211,10 @@ body {
 }
 
 /* INPUT */
-.input-box {
-  display: flex;
-  background: #f1f5f9;
-  border-radius: 20px;
+.input-box { 
+  display: flex; 
+  background: #f1f5f9; 
+  border-radius: 20px; 
   padding: 6px 10px;
   align-items: flex-end;
 }
@@ -224,36 +236,30 @@ textarea::placeholder {
   color: #94a3b8;
 }
 
-/* SEND BUTTON */
-.send-btn {
-  width: 42px;
-  height: 42px;
+/* SEND */
+.send-btn { 
+  width: 42px; 
+  height: 42px; 
   border-radius: 50%;
-  border: none;
-  background: #cbd5e1;
-  color: white;
-  cursor: pointer;
+  border: none; 
+  background: #cbd5e1; 
+  color: white; 
+  cursor: pointer; 
   transition: 0.2s;
-  display: flex;
-  align-items: center;
+  display: flex; 
+  align-items: center; 
   justify-content: center;
 }
 
-.send-btn.active {
+.send-btn.active { 
   background: #2563eb;
 }
 
 /* ================= ANIMATIONS ================= */
 
 @keyframes robotIntro {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.85);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0% { opacity: 0; transform: translateY(20px) scale(0.85); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes floatRobot {
@@ -263,14 +269,8 @@ textarea::placeholder {
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* UTIL */
@@ -281,25 +281,10 @@ textarea::placeholder {
 .delay-1 { animation-delay: 0.2s; }
 .delay-2 { animation-delay: 0.4s; }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.6); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideRight {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
 /* MOBILE */
 @media (max-width: 600px) {
