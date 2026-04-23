@@ -18,19 +18,24 @@ function App() {
   const chatEndRef = useRef(null);
 
   // ✅ FIX HEADER HILANG (WAJIB)
-  useEffect(() => {
-    const updateHeight = () => {
-      const vh = window.visualViewport?.height || window.innerHeight;
-      document.documentElement.style.setProperty('--app-height', `${vh}px`);
-    };
+useEffect(() => {
+  const updateHeight = () => {
+    const vh = window.visualViewport?.height || window.innerHeight;
+    const offsetTop = window.visualViewport?.offsetTop || 0;
 
-    updateHeight();
-    window.visualViewport?.addEventListener('resize', updateHeight);
+    document.documentElement.style.setProperty('--app-height', `${vh}px`);
+    document.documentElement.style.setProperty('--app-offset-top', `${offsetTop}px`);
+  };
 
-    return () => {
-      window.visualViewport?.removeEventListener('resize', updateHeight);
-    };
-  }, []);
+  updateHeight();
+  window.visualViewport?.addEventListener('resize', updateHeight);
+  window.visualViewport?.addEventListener('scroll', updateHeight);
+
+  return () => {
+    window.visualViewport?.removeEventListener('resize', updateHeight);
+    window.visualViewport?.removeEventListener('scroll', updateHeight);
+  };
+}, []);
 
   // Auto scroll
   useEffect(() => {
