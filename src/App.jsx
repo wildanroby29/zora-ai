@@ -140,12 +140,23 @@ useEffect(() => {
           {/* FOOTER */}
           <footer className="footer slide-up">
             <div className="input-box">
-              <input 
-                value={input} 
-                onChange={e => setInput(e.target.value)} 
-                onKeyDown={e => e.key === 'Enter' && handleSend()} 
-                placeholder="Tanya sesuatu ke Zora..." 
-              />
+              <textarea
+              rows={1}
+              value={input}
+              onChange={(e) => {
+               setInput(e.target.value);
+               e.target.style.height = "auto";
+               e.target.style.height = e.target.scrollHeight + "px";
+             }}
+             onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               handleSend();
+             }
+           }}
+           placeholder="Ketik pesan..."
+          />
+
               <button 
                 className={`send-btn ${input.trim() ? 'active' : ''}`} 
                 onClick={handleSend}
