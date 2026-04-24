@@ -76,7 +76,7 @@ useEffect(() => {
 
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Maaf Wildan, koneksi saya sedang terputus.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Mohon maaf, koneksi sedang diperbaiki.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
