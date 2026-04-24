@@ -129,10 +129,18 @@ useEffect(() => {
           {/* CHAT */}
           <div className="chat-window">
             {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.sender === 'user' ? 'user' : 'bot'} slide-up`}>
-                {m.text}
-              </div>
-            ))}
+             <div key={i} className={`msg ${m.sender === 'user' ? 'user' : 'bot'} slide-up`}>
+              {m.sender === 'user' 
+               ? m.text 
+               : (m.text || "").split(/(\*\*.*?\*\*)/g).map((part, index) => {
+                  if (part.startsWith('**') && part.endsWith('**')) {
+                    return <strong key={index}>{part.replace(/\*\*/g, '')}</strong>;
+                   }
+                   return part;
+                  })
+               }
+             </div>
+           ))}
 
             {loading && (
               <div className="msg bot slide-up">

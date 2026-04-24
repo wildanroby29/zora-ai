@@ -188,16 +188,22 @@ body {
   gap: 12px;
 }
 
-/* MESSAGE */
-.msg { 
+/* Balon Chat */
+.msg {
   max-width: 80%;
   padding: 12px 16px;
   border-radius: 18px;
   font-size: 0.95rem;
   line-height: 1.5;
-  white-space: pre-wrap;
+  white-space: pre-wrap; /* Menjaga baris baru/enter */
   word-break: break-word;
   animation: fadeInUp 0.25s ease;
+}
+
+/* Penegasan Teks Tebal (Hasil dari pembuangan bintang tadi) */
+.msg strong {
+  font-weight: 800; /* Bikin lebih tebal biar kontras */
+  color: inherit;
 }
 
 .bot { 
