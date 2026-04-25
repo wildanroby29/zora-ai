@@ -353,3 +353,48 @@ textarea::placeholder {
   .start-btn { min-width: 180px; padding: 14px 30px; }
   .msg { max-width: 90%; }
 }
+
+/* OPTIONS WRAPPER (Tempat tombol pilihan muncul) */
+.options-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 5px 0 15px 0; /* Padding atas-bawah agar tidak menempel balon chat */
+  align-self: flex-start; /* Sejajar dengan bot di sebelah kiri */
+  width: 100%;
+}
+
+.option-btn {
+  background: #ffffff;
+  color: #1e40af; /* Warna biru senada dengan branding */
+  border: 2px solid #e2e8f0;
+  padding: 10px 18px;
+  border-radius: 25px; /* Bulat sempurna */
+  font-size: 0.9rem;
+  font-weight: 700; /* Tebal sesuai identitas Zora */
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  animation: fadeInUp 0.4s ease forwards;
+  outline: none;
+}
+
+/* Efek saat tombol di-hover atau diklik */
+.option-btn:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+}
+
+.option-btn:active {
+  transform: scale(0.96);
+}
+
+/* Mengatur jarak antara pesan bot dan tombol di bawahnya */
+.msg-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}

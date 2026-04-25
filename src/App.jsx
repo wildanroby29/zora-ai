@@ -17,69 +17,78 @@ function App() {
   const [appLoading, setAppLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // ✅ FIX HEADER HILANG (WAJIB)
-useEffect(() => {
-  const updateHeight = () => {
-    const vh = window.visualViewport?.height || window.innerHeight;
-    const offsetTop = window.visualViewport?.offsetTop || 0;
+  // ✅ FIX VIEWPORT (Sama seperti kode Anda)
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', `${vh}px`);
+    };
+    updateHeight();
+    window.visualViewport?.addEventListener('resize', updateHeight);
+    return () => window.visualViewport?.removeEventListener('resize', updateHeight);
+  }, []);
 
-    document.documentElement.style.setProperty('--app-height', `${vh}px`);
-    document.documentElement.style.setProperty('--app-offset-top', `${offsetTop}px`);
-  };
-
-  updateHeight();
-  window.visualViewport?.addEventListener('resize', updateHeight);
-  window.visualViewport?.addEventListener('scroll', updateHeight);
-
-  return () => {
-    window.visualViewport?.removeEventListener('resize', updateHeight);
-    window.visualViewport?.removeEventListener('scroll', updateHeight);
-  };
-}, []);
-
-  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // ✅ START APP: Sekarang memicu "start" dari flow.json
   const startApp = () => {
     setAppLoading(true);
     setTimeout(() => {
       setAppLoading(false);
       setIsStarted(true);
-      setTimeout(() => {
-        setMessages([{ 
-          text: `Selamat datang, ada yang bisa kami bantu hari ini?`, 
-          sender: 'bot' 
-        }]);
-      }, 600);
+      // Panggil fungsi handleSend tapi dengan step_key 'start'
+      handleSend(null, 'start');
     }, 1500);
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || loading) return;
+  // ✅ HANDLE SEND: Mendukung pesan teks biasa DAN klik tombol (step_key)
+  const handleSend = async (userText = null, stepKey = null) => {
+    const messageToSend = userText || input;
+    if (!messageToSend.trim() && !stepKey) return;
 
-    const currentInput = input;
-
-    setMessages(prev => [...prev, { text: currentInput, sender: 'user' }]);
-    setInput('');
+    if (!stepKey) {
+      setMessages(prev => [...prev, { text: messageToSend, sender: 'user' }]);
+      setInput('');
+    }
+    
     setLoading(true);
 
     try {
       const res = await fetch("https://wildanrobians29-chat-backend.hf.space/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: currentInput, category: APP_MODE })
+        body: JSON.stringify({ 
+          message: messageToSend, 
+          category: APP_MODE,
+          step_key: stepKey // Kirim step_key jika ada
+        })
       });
 
       const data = await res.json();
 
-      setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
+      // Tambahkan pesan bot dan simpan options jika ada
+      setMessages(prev => [...prev, { 
+        text: data.reply, 
+        sender: 'bot', 
+        options: data.options || [] // Simpan tombol pilihan dari backend
+      }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Mohon maaf, koneksi sedang diperbaiki.", sender: 'bot' }]);
+      setMessages(prev => [...prev, { text: "Koneksi sedang bermasalah.", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Rendering Helper untuk Bold (Sama seperti kode Anda)
+  const renderText = (text) => {
+    return (text || "").split(/(\*\*.*?\*\*)/g).map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index}>{part.replace(/\*\*/g, '')}</strong>;
+      }
+      return part;
+    });
   };
 
   if (appLoading) {
@@ -93,87 +102,84 @@ useEffect(() => {
 
   return (
     <div className="app-shell">
-  {!isStarted ? (
-    <div className="welcome-page">
-      <div className="welcome-content zoom-in">
-
-        <div className="robot-wrapper">
-          <img src={botLogo} alt="Logo" className="bot-welcome-img" />
+      {!isStarted ? (
+        <div className="welcome-page">
+          <div className="welcome-content zoom-in">
+            <div className="robot-wrapper">
+              <img src={botLogo} alt="Logo" className="bot-welcome-img" />
+            </div>
+            <h1 className="slide-up">{APP_NAME}</h1>
+            <p className="slide-up delay-1">{APP_TAGLINE}</p>
+            <button className="start-btn slide-up delay-2" onClick={startApp}>
+              Mulai Percakapan
+            </button>
+          </div>
         </div>
-
-        <h1 className="slide-up">{APP_NAME}</h1>
-        <p className="slide-up delay-1">{APP_TAGLINE}</p>
-
-        <button className="start-btn slide-up delay-2" onClick={startApp}>
-          Mulai Percakapan
-        </button>
-
-      </div>
-    </div>
-  ) : (
+      ) : (
         <div className="main-chat-layout fade-in">
-
-          {/* HEADER */}
           <header className="chat-header">
             <img src={botLogo} alt="Icon" className="bot-header-img" />
             <div className="info">
-              <h2 className="slide-right">
-                {APP_NAME}
-              </h2>
+              <h2 className="slide-right">{APP_NAME}</h2>
               <div className="status slide-right delay-1">
                 <span className="dot pulse"></span> Online
               </div>
             </div>
           </header>
 
-          {/* CHAT */}
           <div className="chat-window">
             {messages.map((m, i) => (
-             <div key={i} className={`msg ${m.sender === 'user' ? 'user' : 'bot'} slide-up`}>
-              {m.sender === 'user' 
-               ? m.text 
-               : (m.text || "").split(/(\*\*.*?\*\*)/g).map((part, index) => {
-                  if (part.startsWith('**') && part.endsWith('**')) {
-                    return <strong key={index}>{part.replace(/\*\*/g, '')}</strong>;
-                   }
-                   return part;
-                  })
-               }
-             </div>
-           ))}
+              <div key={i} className="msg-group">
+                <div className={`msg ${m.sender === 'user' ? 'user' : 'bot'} slide-up`}>
+                  {renderText(m.text)}
+                </div>
+                
+                {/* ✅ RENDER TOMBOL PILIHAN JIKA ADA */}
+                {m.sender === 'bot' && m.options && m.options.length > 0 && (
+                  <div className="options-wrapper slide-up">
+                    {m.options.map((opt, idx) => (
+                      <button 
+                        key={idx} 
+                        className="option-btn" 
+                        onClick={() => handleSend(opt.label, opt.next)}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
 
             {loading && (
               <div className="msg bot slide-up">
                 <TypingAnimation />
               </div>
             )}
-
             <div ref={chatEndRef} />
           </div>
 
-          {/* FOOTER */}
           <footer className="footer slide-up">
             <div className="input-box">
               <textarea
-              rows={1}
-              value={input}
-              onChange={(e) => {
-               setInput(e.target.value);
-               e.target.style.height = "auto";
-               e.target.style.height = e.target.scrollHeight + "px";
-             }}
-             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-               e.preventDefault();
-               handleSend();
-             }
-           }}
-           placeholder="Ketik pesan..."
-          />
-
+                rows={1}
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  e.target.style.height = "auto";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Ketik pesan..."
+              />
               <button 
                 className={`send-btn ${input.trim() ? 'active' : ''}`} 
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={!input.trim() || loading}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -182,7 +188,6 @@ useEffect(() => {
               </button>
             </div>
           </footer>
-
         </div>
       )}
     </div>
