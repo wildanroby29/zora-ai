@@ -141,7 +141,7 @@ function App() {
                       <button 
                         key={idx} 
                         className="option-btn" 
-                        onClick={() => handleSend(opt.label, opt.next)}
+                        onClick={() => handleSend(opt.label, opt.next_step)}
                       >
                         {opt.label}
                       </button>
